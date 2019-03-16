@@ -401,12 +401,18 @@ const uint8_t Range_Disp_Test[][7][11+1]=
 {
     {
         //{"AUTO 10m次"},
-        {"AUTO100m次"},
-        {"AUTO   1次"},
-        {"AUTO  10次"},
-        {"AUTO 100次"},
-        {"AUTO  1k次"},
-        {"AUTO 10k次"},
+//        {"AUTO100m次"},
+//        {"AUTO   1次"},
+//        {"AUTO  10次"},
+//        {"AUTO 100次"},
+//        {"AUTO  1k次"},
+//        {"AUTO 10k次"},
+		{"100m次"},
+        {"   1次"},
+        {"  10次"},
+        {" 100次"},
+        {"  1k次"},
+        {" 10k次"},
        
     },
     {
@@ -1379,11 +1385,19 @@ void Test_Debug(void)
 {
     float a,b;
 //    
-    Res_count.r=Res_count.r/Jk510_Set.Debug_Value[Range].ad_value;
-        //Res_count.r=Res_count.r/Jk516save.Debug_Value[Range].ad_value;
-       // V_ad=(float)V_ad/Jk516save.Debug_Value[3+V_Range].ad_value;
-	V_ad=(float)V_ad/Jk510_Set.Debug_Value[3+V_Range].ad_value;
-   
+	if(Jk510_Set.jk510_SSet.speed == 0)
+	{
+		Res_count.r=Res_count.r/Jk510_Set.Debug_Value[Range].ad_value;
+			//Res_count.r=Res_count.r/Jk516save.Debug_Value[Range].ad_value;
+		   // V_ad=(float)V_ad/Jk516save.Debug_Value[3+V_Range].ad_value;
+		V_ad=(float)V_ad/Jk510_Set.Debug_Value[3+V_Range].ad_value;
+	}else if(Jk510_Set.jk510_SSet.speed == 1){
+		Res_count.r=Res_count.r/Jk510_Set.Debug_Value1[Range].ad_value;
+			//Res_count.r=Res_count.r/Jk516save.Debug_Value[Range].ad_value;
+		   // V_ad=(float)V_ad/Jk516save.Debug_Value[3+V_Range].ad_value;
+		V_ad=(float)V_ad/Jk510_Set.Debug_Value1[3+V_Range].ad_value;
+	}
+						   
 }
 
 
@@ -5443,7 +5457,7 @@ void Disp_Range(u8 hand,u8 range)
     if(range>6)
         range=6;
     Colour.black =LCD_COLOR_TEST_BACK;
-    WriteString_16(SORTING_XDISP-20, SORTING_Y_DISP+30, Range_Disp_Test[hand][range],  0);
+    WriteString_16(SORTING_XDISP/*-20*/+15, SORTING_Y_DISP+30, Range_Disp_Test[hand][range],  0);
 
 
 }
@@ -6467,6 +6481,7 @@ void read_adV_2(void)
         
             
         }
+
         V_ad/=98;
         buff[j]=V_ad;
     }

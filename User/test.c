@@ -986,15 +986,27 @@ void Test_Process(void)
 						Trip_Over_usb=1;
 						
 						Ad_over=0; 
-						
-						if(Jk510_Set.jk510_SSet.mode)
+						if(Jk510_Set.jk510_SSet.speed == 0)
 						{
-							I_ad=I_ad-Jk510_Set.Clear[i][Range];
-						}
-						else
-						{
-							I_ad=I_ad-Jk510_Set.SClear[Range];//再判断极性
-						
+							if(Jk510_Set.jk510_SSet.mode)
+							{
+								I_ad=I_ad-Jk510_Set.Clear[i][Range];
+							}
+							else
+							{
+								I_ad=I_ad-Jk510_Set.SClear[Range];//再判断极性
+							
+							}
+						}else if(Jk510_Set.jk510_SSet.speed == 1){
+							if(Jk510_Set.jk510_SSet.mode)
+							{
+								I_ad=I_ad-Jk510_Set.Clear1[i][Range];
+							}
+							else
+							{
+								I_ad=I_ad-Jk510_Set.SClear1[Range];//再判断极性
+							
+							}
 						}
 						   if(I_ad<0)
 						   {
@@ -1016,15 +1028,27 @@ void Test_Process(void)
 					   
 								//Disp_Open();//增加开路的时候的显示---------------------------
 						   }
-							
-						   if(Jk510_Set.jk510_SSet.mode)
+						   if(Jk510_Set.jk510_SSet.speed == 0)
 						   {
-								V_ad=V_ad-Jk510_Set.Clear_V[i][V_Range];
-						   }
-						   else
-						   {
-								V_ad=V_ad-Jk510_Set.SClear_V[V_Range];
-						   
+							   if(Jk510_Set.jk510_SSet.mode)
+							   {
+									V_ad=V_ad-Jk510_Set.Clear_V[i][V_Range];
+							   }
+							   else
+							   {
+									V_ad=V_ad-Jk510_Set.SClear_V[V_Range];
+							   
+							   }
+						   }else if(Jk510_Set.jk510_SSet.speed == 1){
+							   if(Jk510_Set.jk510_SSet.mode)
+							   {
+									V_ad=V_ad-Jk510_Set.Clear_V1[i][V_Range];
+							   }
+							   else
+							   {
+									V_ad=V_ad-Jk510_Set.SClear_V1[V_Range];
+							   
+							   }
 						   }
 							if(V_ad<0)
 							{
@@ -1073,9 +1097,9 @@ void Test_Process(void)
 										Dispbuff[0]='-';
 									else
 										Dispbuff[0]=' ';
-									Hex_Format(jk510_Disp.Disp_V[i].res,jk510_Disp.Disp_V[i].dot,5,FALSE );
+									Hex_Format(jk510_Disp.Disp_V[i].res,jk510_Disp.Disp_V[i].dot,6,FALSE );
 									strcpy(&Dispbuff[1],(char *)DispBuf);
-									strcat((char *)Dispbuff,(char *)" V");
+									strcat((char *)Dispbuff,(char *)"V");
 									if(Jk510_Set.jk510_SSet.mode)
 									WriteString_16(296+30, 26+i*20,(u8 *)Dispbuff,  0);//显示电压
 									else
@@ -2459,15 +2483,26 @@ void Use_DebugProcess(void)
     Range_Control(0,0);
  	while(GetSystemStatus()==SYS_STATUS_DEBUG)
 	{
+		if(Jk510_Set.jk510_SSet.speed == 0)
+		{
+			 Select_V_I(1);
+			read_adI_1();//
+			Range_value=I_ad;
 
-         Select_V_I(1);
-        read_adI_1();//
-        Range_value=I_ad;
+			Select_V_I(0);
+			
+			read_adV_1();
+			Range_Value_V=V_ad;
+		}else if(Jk510_Set.jk510_SSet.speed == 1){
+			Select_V_I(1);
+			read_adI_2();//
+			Range_value=I_ad;
 
-        Select_V_I(0);
-        
-        read_adV_1();
-        Range_Value_V=V_ad;
+			Select_V_I(0);
+			
+			read_adV_2();
+			Range_Value_V=V_ad;
+		}
 
 
 		if(test_start)
@@ -2490,9 +2525,14 @@ void Use_DebugProcess(void)
                     
                                         
                 }
-                
-                I_ad=I_ad-Jk510_Set.SClear[list-1];//再判断极性
-                I_ad=(I_ad)/169;
+                if(Jk510_Set.jk510_SSet.speed == 0)
+				{
+					I_ad=I_ad-Jk510_Set.SClear[list-1];//再判断极性
+					I_ad=(I_ad)/169;
+				} else if(Jk510_Set.jk510_SSet.speed == 1){
+					I_ad=I_ad-Jk510_Set.SClear1[list-1];//再判断极性
+					I_ad=(I_ad)/169;
+				}
 //                 if(list-1 ==6)
 //                {
 //                     
@@ -2522,9 +2562,16 @@ void Use_DebugProcess(void)
                     V_ad=-V_ad;
                     
                 }
-                if(list>3)
-                V_ad=V_ad-Jk510_Set.SClear_V[list-4];
-                V_ad=V_ad/45;
+				if(Jk510_Set.jk510_SSet.speed == 0)
+				{
+					if(list>3)
+					V_ad=V_ad-Jk510_Set.SClear_V[list-4];
+					V_ad=V_ad/45;
+				}else if(Jk510_Set.jk510_SSet.speed == 1){
+					if(list>3)
+					V_ad=V_ad-Jk510_Set.SClear_V1[list-4];
+					V_ad=V_ad/45;
+				}
                 {
                     Test_Value_V=V_Datacov(V_ad ,V_Range);//把数据的小数点和单位 和极性都加上
                     Test_Value=Datacov(I_ad,list-1);
@@ -2690,17 +2737,32 @@ void Use_DebugProcess(void)
 				Coordinates.lenth=70;
                 if(test_start)
                 {
-                    if(list<4)
-                    {
-                        Jk510_Set.Debug_Value[list-1].standard=Debug_Set_Res(&Coordinates);//电阻
-                        Jk510_Set.Debug_Value[list-1].ad_value=(float)Test_Value.res/Jk510_Set.Debug_Value[list-1].standard;
-                    }
-                    else
-                    {
-                      Jk510_Set.Debug_Value[list-1].standard=Debug_Set_Num(&Coordinates);//电压
-                        Jk510_Set.Debug_Value[list-1].ad_value=(float)Test_Value_V.res/Jk510_Set.Debug_Value[list-1].standard;
-                        
-                    }
+					if(Jk510_Set.jk510_SSet.speed == 0)
+					{
+						if(list<4)
+						{
+							Jk510_Set.Debug_Value[list-1].standard=Debug_Set_Res(&Coordinates);//电阻
+							Jk510_Set.Debug_Value[list-1].ad_value=(float)Test_Value.res/Jk510_Set.Debug_Value[list-1].standard;
+						}
+						else
+						{
+						  Jk510_Set.Debug_Value[list-1].standard=Debug_Set_Num(&Coordinates);//电压
+							Jk510_Set.Debug_Value[list-1].ad_value=(float)Test_Value_V.res/Jk510_Set.Debug_Value[list-1].standard;
+							
+						}
+					}else if(Jk510_Set.jk510_SSet.speed == 1){
+						if(list<4)
+						{
+							Jk510_Set.Debug_Value1[list-1].standard=Debug_Set_Res(&Coordinates);//电阻
+							Jk510_Set.Debug_Value1[list-1].ad_value=(float)Test_Value.res/Jk510_Set.Debug_Value1[list-1].standard;
+						}
+						else
+						{
+						  Jk510_Set.Debug_Value1[list-1].standard=Debug_Set_Num(&Coordinates);//电压
+							Jk510_Set.Debug_Value1[list-1].ad_value=(float)Test_Value_V.res/Jk510_Set.Debug_Value1[list-1].standard;
+							
+						}
+					}
                     
                 }
                 test_start=0;
@@ -2822,15 +2884,28 @@ void Clear_Process(void)
 					Clear_num=0;
 //					if(Jk510_Set.jk510_SSet.mode)
 //					{
-						Jk510_Set.Clear[i][list]=I_ad;
-						//Jk516save.Clear[list]=I_ad;
-						if(list<2)
-						{
-							Jk510_Set.Clear_V[i][list]=V_ad;
-							//Jk516save.Clear_V[list]=V_ad;
-							range_v=list;
-							
-						}
+				if(Jk510_Set.jk510_SSet.speed == 0)
+				{
+					Jk510_Set.Clear[i][list]=I_ad;
+					//Jk516save.Clear[list]=I_ad;
+					if(list<2)
+					{
+						Jk510_Set.Clear_V[i][list]=V_ad;
+						//Jk516save.Clear_V[list]=V_ad;
+						range_v=list;
+						
+					}
+				}else if(Jk510_Set.jk510_SSet.speed == 1){
+					Jk510_Set.Clear1[i][list]=I_ad;
+					//Jk516save.Clear[list]=I_ad;
+					if(list<2)
+					{
+						Jk510_Set.Clear_V1[i][list]=V_ad;
+						//Jk516save.Clear_V[list]=V_ad;
+						range_v=list;
+						
+					}
+				}
 //					}
 //					else
 //					{
@@ -2896,25 +2971,54 @@ void Clear_Process(void)
 				Range_Changecomp();	//换挡 比较
 			}else if(Jk510_Set.jk510_SSet.speed == 1){
 				Select_V_I(1);
+			read_adI_2();//
+			Range_value=I_ad;
+			Range_Changecomp();	//换挡 比较
+			while(range_over)
+			{
+				Range_Changecomp();	//换挡 比较
+				
 				read_adI_2();//
 				Range_value=I_ad;
-				Range_Changecomp();	//换挡 比较
-				while(range_over)
-				{
-					Range_Changecomp();	//换挡 比较
-					
-					read_adI_2();//
-					Range_value=I_ad;
-				
-				
-				}
-				Select_V_I(0);
-				
-				read_adV_2();
-				Range_Value_V=V_ad;
-				Range_Changecomp();	//换挡 比较
+				 if(Keyboard.state==TRUE)
+				break; 
+			
 			}
-		   
+			Select_V_I(0);
+			
+			read_adV_2();
+			Range_Value_V=V_ad;
+			Range_Changecomp();	//换挡 比较
+			while(range_over)
+			{
+				Range_Changecomp();	//换挡 比较
+				
+				read_adV_2();//
+			   Range_Value_V=V_ad;
+			 if(Keyboard.state==TRUE)
+				break; 
+			
+			}
+//				Select_V_I(1);
+//				read_adI_2();//
+//				Range_value=I_ad;
+//				Range_Changecomp();	//换挡 比较
+//				while(range_over)
+//				{
+//					Range_Changecomp();	//换挡 比较
+//					
+//					read_adI_2();//
+//					Range_value=I_ad;
+//				
+//				
+//				}
+//				Select_V_I(0);
+//				
+//				read_adV_2();
+//				Range_Value_V=V_ad;
+//				Range_Changecomp();	//换挡 比较
+			}
+		    
 
 			   
 			if(V_ad>0x800000)
@@ -2953,6 +3057,8 @@ void Clear_Process(void)
 //				else
 //				{
 					//Jk510_Set.Clear[i][list]=I_ad;
+				if(Jk510_Set.jk510_SSet.speed == 0)
+				{
 					Jk510_Set.SClear[list]=I_ad;
 					if(list<2)
 					{
@@ -2961,6 +3067,16 @@ void Clear_Process(void)
 						range_v=list;
 						
 					}
+				}else if(Jk510_Set.jk510_SSet.speed == 1){
+					Jk510_Set.SClear1[list]=I_ad;
+					if(list<2)
+					{
+						//Jk510_Set.Clear_V[i][list]=V_ad;
+						Jk510_Set.SClear_V1[list]=V_ad;
+						range_v=list;
+						
+					}
+				}
 				
 				
 //				}

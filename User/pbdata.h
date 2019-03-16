@@ -783,14 +783,19 @@ typedef struct
 	Res_comp_Typedef Res_comp;//电阻上下限设置
 	V_comp_Typedef V_comp;//电压上下限设置
     Debug_Value_Typedef Debug_Value[DEBUG_RANGE];//矫正数据
+	Debug_Value_Typedef Debug_Value1[DEBUG_RANGE];//矫正数据
 	Sys_Setvalue_Typedef Sys_Setvalue;
 	u8 channel_sellect[10];//通道选择
     u8 sel_only;//设置方式  独立设置或者统一设置
-    float Clear[10][RANGE_MAX+1];//清零
-     float Clear_V[10][2];//电压清零
+    float Clear[10][RANGE_MAX+1];//慢速清零
+     float Clear_V[10][2];//慢速电压清零
+	float Clear1[10][RANGE_MAX+1];//快速清零
+     float Clear_V1[10][2];//快速电压清零
     vu8 fac_num[10];//机器编号
 	float SClear[RANGE_MAX+1];
 	float SClear_V[2];
+	float SClear1[RANGE_MAX+1];
+	float SClear_V1[2];
 
 }Jk510_Set_Typedef;
 extern Jk510_Set_Typedef Jk510_Set;

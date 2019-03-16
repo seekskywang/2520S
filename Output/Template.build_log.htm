@@ -21,13 +21,30 @@ Target DLL:      Segger\JL2CM3.dll V2.99.29.0
 Dialog DLL:      TCM.DLL V1.35.1.0
  
 <h2>Project:</h2>
-F:\JK526_2018-12-23-sm\Project\RVMDK£¨uv5£©\BH-F429.uvprojx
+F:\2520S\Project\RVMDK£¨uv5£©\BH-F429.uvprojx
 Project File Date:  03/01/2019
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
 Build target '¹¤³ÌÄ£°å'
-"..\..\Output\Template.axf" - 0 Error(s), 0 Warning(s).
+compiling test.c...
+..\..\User\test.c(2162): warning:  #111-D: statement is unreachable
+                      break;
+..\..\User\test.c(657): warning:  #177-D: variable "Extrigflag"  was declared but never referenced
+        static u8 Extrigflag = 0;
+..\..\User\test.c(662): warning:  #177-D: variable "color"  was declared but never referenced
+      u32 color;
+..\..\User\test.c(663): warning:  #550-D: variable "keynum"  was set but never used
+      u8 keynum=0;
+..\..\User\test.c(2465): warning:  #177-D: variable "a"  was declared but never referenced
+      float a,b;
+..\..\User\test.c(2465): warning:  #177-D: variable "b"  was declared but never referenced
+      float a,b;
+..\..\User\test.c: 6 warnings, 0 errors
+linking...
+Program Size: Code=73412 RO-data=202284 RW-data=388 ZI-data=32900  
+FromELF: creating hex file...
+"..\..\Output\Template.axf" - 0 Error(s), 6 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -41,7 +58,7 @@ Package Vendor: Keil
   D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.12.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>
