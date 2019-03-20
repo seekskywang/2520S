@@ -377,7 +377,7 @@ const uint8_t BiasButton_Tip[][7+1]=  //频率选择时候的下面的提示符号
 
 const uint8_t Sys_Sys[][20+1]=
 {
-	{"仪器型号  JK2520D"},
+	{"仪器型号  JK2520S"},
 	{"软件版本  Ver:1.1"},
 	{"硬件版本  Ver:1.1"},
 	{"仪器编号"},
@@ -388,9 +388,9 @@ const uint8_t Sys_Sys[][20+1]=
 };
 const uint8_t Sys_Sys_E[][20+1]=
 {
-	{"INST MODEL  JK2520D"},
-	{"SOFT VER   Ver:1.0"},
-	{"HARD VER   Ver:1.0"},
+	{"INST MODEL  JK2520S"},
+	{"SOFT VER   Ver:1.1"},
+	{"HARD VER   Ver:1.1"},
 	{"SERIALNO"},
 //	{"账号    "},
 
@@ -446,7 +446,7 @@ const u8 RANG_4094[8]={0x48,0x48,0x48,0x80,0x01,0x01,0x02,0x04};//换挡的时候的40
 //位操作增减数值
 const u16 POW_NUM[4]=
 {
-	1000,
+	1000, 
 	100,
 	10,
 	1,
@@ -1897,6 +1897,8 @@ void Disp_Open(void)
     
     
     }
+	WriteString_16(416, 26+0*20, (u8 *)"      ",  0);
+	WriteString_16(240-10, 26+0*20, (u8 *)"      ",  0);
     Close_Compled();
     Beep_Out(0);
     Beep_Off();
@@ -1913,6 +1915,7 @@ void Disp_Testvalue(Test_ValueTypedef value,Test_ValueTypedef value_v,u8 speed)
     u8 i;
 //    u32 date;
     u32 Res_disp;
+	vu8 test_Vsorting,test_Rsorting;
     Res_disp=value.res;
     for(i=0;i<9;i++)
     DispBuf[i]=0;
@@ -1940,6 +1943,36 @@ void Disp_Testvalue(Test_ValueTypedef value,Test_ValueTypedef value_v,u8 speed)
     
     }
     #endif
+	if(Jk510_Set.jk510_SSet.V_Comp)
+	{
+		test_Vsorting= V_Comp();
+		if(polarity_v==0)
+			test_Vsorting=2;
+									
+	}
+	if(Jk510_Set.jk510_SSet.R_Comp)
+		test_Rsorting=R_Comp();
+	
+	if(Jk510_Set.jk510_SSet.R_Comp==1)//电阻分选
+	{
+		
+		jk510_Disp.Res_state[i]=test_Rsorting;
+		if(test_Rsorting)//不合格
+		{
+			Colour.Fword= LCD_COLOR_RED;
+			
+		}
+		else
+		{
+			Colour.Fword=LCD_COLOR_GREEN;
+			
+		}	
+	}
+	 else//电阻不分选
+	{
+		Colour.Fword = LCD_COLOR_WHITE;
+	
+	}
     if(Res_disp>33000)
     {
         for(i=0;i<6;i++)
@@ -1987,7 +2020,22 @@ void Disp_Testvalue(Test_ValueTypedef value,Test_ValueTypedef value_v,u8 speed)
     
     }
         
-    
+    if(Jk510_Set.jk510_SSet.V_Comp==1)//电压分选打开
+	{
+		jk510_Disp.V_State[i]=test_Vsorting;
+		if(test_Vsorting)//不合格
+		{
+			Colour.Fword= LCD_COLOR_RED;
+			
+		}
+		else
+		{
+			Colour.Fword=LCD_COLOR_GREEN;
+		}
+	
+	}else{
+		Colour.Fword=LCD_COLOR_WHITE;
+	}
         Hex_Format(value_v.res , value_v.dot , 6, FALSE);
         memcpy((void *)&Send_ComBuff.send_V[1],DispBuf,7);//
         memcpy((void *)&Send_To_U.Send_V[1],DispBuf,7);//存U盘
@@ -3545,9 +3593,10 @@ void DispSetV_value(u8 keynum)
             {
                 Colour.black=LCD_COLOR_TEST_BACK;
             }
-            Hex_Format(Jk510_Set.V_comp.V_Hi[i-2].Num , Jk510_Set.V_comp.V_Hi[i-2].Dot , 5 , 0);
+            Hex_Format(Jk510_Set.V_comp.V_Hi[i-2].Num , Jk510_Set.V_comp.V_Hi[i-2].Dot , 6 , 0);
             LCD_DrawFullRect(LIST1+88+20, FIRSTLINE+SPACE1*(i-2), SELECT_1END-(LIST1+70), SPACE1-4);
-            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Hi[i-2].Unit]);
+			strcat((char *)DispBuf,(char *)" V");
+//            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Hi[i-2].Unit]);
             WriteString_16(LIST1+88+20+10, FIRSTLINE+SPACE1*(i-2), DispBuf,  0);
            // WriteString_16(LIST1+90+8*7+2, FIRSTLINE+SPACE1*(i-2),DISP_UINT[Jk510_Set.Res_comp.Res_Hi[i-2].Unit],  0);
         
@@ -3564,9 +3613,10 @@ void DispSetV_value(u8 keynum)
             {
                 Colour.black=LCD_COLOR_TEST_BACK;
             }
-            Hex_Format(Jk510_Set.V_comp.V_Lo[i-2].Num , Jk510_Set.V_comp.V_Lo[i-2].Dot , 5 , 0);
+            Hex_Format(Jk510_Set.V_comp.V_Lo[i-2].Num , Jk510_Set.V_comp.V_Lo[i-2].Dot , 6 , 0);
             LCD_DrawFullRect(LIST2+88+20+10, FIRSTLINE+SPACE1*(i-2), SELECT_2END-(LIST2+70), SPACE1-4);
-            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Lo[i-2].Unit]);
+			strcat((char *)DispBuf,(char *)" V");
+//            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Lo[i-2].Unit]);
             WriteString_16(LIST2+88+20+10, FIRSTLINE+SPACE1*(i-2), DispBuf,  0);
            // WriteString_16(LIST2+90+8*7+2, FIRSTLINE+SPACE1*(i-2),DISP_UINT[Jk510_Set.Res_comp.Res_Lo[i-2].Unit],  0);
         
@@ -3585,10 +3635,11 @@ void DispSetV_value(u8 keynum)
             {
                 Colour.black=LCD_COLOR_TEST_BACK;
             }
-            Hex_Format(Jk510_Set.V_comp.V_Hi[0].Num , Jk510_Set.V_comp.V_Hi[0].Dot , 5 , 0);
-            LCD_DrawFullRect(LIST1+88+20+10, FIRSTLINE, SELECT_1END-(LIST1+70), SPACE1-4);
-            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Hi[0].Unit]);
-            WriteString_16(LIST1+88+20+10, FIRSTLINE, DispBuf,  0);
+            Hex_Format(Jk510_Set.V_comp.V_Hi[0].Num , Jk510_Set.V_comp.V_Hi[0].Dot , 6 , 0);
+            LCD_DrawFullRect(LIST1+88+20, FIRSTLINE, SELECT_1END-(LIST1+70), SPACE1-4);
+			strcat((char *)DispBuf,(char *)" V");
+//            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Hi[0].Unit]);
+            WriteString_16(LIST1+88+20, FIRSTLINE, DispBuf,  0);
         
             Black_Select=(keynum==3)?1:0;
             if(Black_Select)//触发
@@ -3599,9 +3650,10 @@ void DispSetV_value(u8 keynum)
             {
                 Colour.black=LCD_COLOR_TEST_BACK;
             }
-            Hex_Format(Jk510_Set.V_comp.V_Lo[0].Num , Jk510_Set.V_comp.V_Lo[0].Dot , 5 , 0);
+            Hex_Format(Jk510_Set.V_comp.V_Lo[0].Num , Jk510_Set.V_comp.V_Lo[0].Dot , 6 , 0);
             LCD_DrawFullRect(LIST2+88+20, FIRSTLINE, SELECT_2END-(LIST2+70), SPACE1-4);
-            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Lo[0].Unit]);
+			strcat((char *)DispBuf,(char *)" V");
+//            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Lo[0].Unit]);
             WriteString_16(LIST2+88+20, FIRSTLINE, DispBuf,  0);
     
     }
@@ -4772,7 +4824,7 @@ void Disp_Sys(void)
 		WriteString_16(LIST1, FIRSTLINE+SPACE1*i, pt[i],  0);
 
 	}//Save_Res.fac_num
-    WriteString_16(LIST1+82, FIRSTLINE+SPACE1*3, (const uint8_t*)Jk516save.fac_num,  0);
+    WriteString_16(LIST1+82, FIRSTLINE+SPACE1*3, (const uint8_t*)Jk510_Set.fac_num,  0);
 //	else
 //	{
 //		WriteString_16(LIST2,FIRSTLINE+SPACE1*(i-sizeof(Sys_Setitem)/(sizeof(Sys_Setitem[0]))/2), Sys_Setitem[i],  0);
@@ -5490,8 +5542,8 @@ uint8_t R_Comp(void)
     float set_lowvalue;
     u8 flag;
     testvalue=Test_Value.res*pow(10,3*(Test_Value.uint))/pow(10,Test_Value.dot);
-    set_highvalue=Jk516save.Set_Data.High_Res.Num*pow(10,3*(Jk516save.Set_Data.High_Res.Unit))/pow(10,Jk516save.Set_Data.High_Res.Dot);
-    set_lowvalue=Jk516save.Set_Data.Res_low.Num*pow(10,3*(Jk516save.Set_Data.Res_low.Unit))/pow(10,Jk516save.Set_Data.Res_low.Dot);
+    set_highvalue=Jk510_Set.Res_comp.Res_Hi[0].Num*pow(10,3*(Jk510_Set.Res_comp.Res_Hi[0].Unit))/pow(10,Jk510_Set.Res_comp.Res_Hi[0].Dot);
+    set_lowvalue=Jk510_Set.Res_comp.Res_Lo[0].Num*pow(10,3*(Jk510_Set.Res_comp.Res_Lo[0].Unit))/pow(10,Jk510_Set.Res_comp.Res_Lo[0].Dot);
     if(testvalue>set_highvalue)//大于上限
         flag=1;
     else if(testvalue<set_lowvalue)//小于下限
@@ -5501,7 +5553,10 @@ uint8_t R_Comp(void)
             
     
     
-    }
+    }else if(polarity_r == 0)
+	{
+		flag=3;//电阻为负
+	}
     else
         flag=0;//合格
     return flag;
@@ -5520,20 +5575,20 @@ uint8_t V_Comp(void)
         dot=10;
     testvalue=Test_Value_V.res*dot;
     
-    if(Jk516save.Set_Data.V_high.Dot==3)
-        set_highvalue=Jk516save.Set_Data.V_high.Num*10;
-    else if(Jk516save.Set_Data.V_high.Dot==5)
-        set_highvalue=Jk516save.Set_Data.V_high.Num/10;
+    if(Jk510_Set.V_comp.V_Hi[0].Dot==3)
+        set_highvalue=Jk510_Set.V_comp.V_Hi[0].Num*10;//Jk516save.Set_Data.V_high.Num*10;
+    else if(Jk510_Set.V_comp.V_Hi[0].Dot==5)
+        set_highvalue=Jk510_Set.V_comp.V_Hi[0].Num/10;//Jk516save.Set_Data.V_high.Num/10;
     else
-        set_highvalue=Jk516save.Set_Data.V_high.Num;
+        set_highvalue=Jk510_Set.V_comp.V_Hi[0].Num;//Jk516save.Set_Data.V_high.Num;
         
     
-    if(Jk516save.Set_Data.V_low.Dot==3)
-        set_lowvalue=Jk516save.Set_Data.V_low.Num*10;
-    else if(Jk516save.Set_Data.V_low.Dot==5)
-        set_lowvalue=Jk516save.Set_Data.V_low.Num/10;
+    if(Jk510_Set.V_comp.V_Lo[0].Dot==3)
+        set_lowvalue=Jk510_Set.V_comp.V_Lo[0].Num*10;//Jk516save.Set_Data.V_low.Num*10;
+    else if(Jk510_Set.V_comp.V_Lo[0].Dot==5)
+        set_lowvalue=Jk510_Set.V_comp.V_Lo[0].Num/10;//Jk516save.Set_Data.V_low.Num/10;
     else
-        set_lowvalue=Jk516save.Set_Data.V_low.Num;
+        set_lowvalue=Jk510_Set.V_comp.V_Lo[0].Num;//;Jk516save.Set_Data.V_low.Num;
     
     if(testvalue>set_highvalue)//大于上限
         flag=1;
@@ -5597,6 +5652,7 @@ void Disp_dateandtime(void)
     
     
     //);
+	Colour.Fword = LCD_COLOR_WHITE;
     Colour.black =LCD_COLOR_TEST_BACK;
     WriteString_16(LIST2, LIST1+4, (const uint8_t *)LCDTemp,  0);
 //    sprintf(LCDTemp,"The Time :  %0.2d:%0.2d:%0.2d", 
@@ -5823,7 +5879,7 @@ void input_num(Disp_Coordinates_Typedef *Coordinates )
                     dispflag=0;
                     for(i=0;i<9;i++)
                     {
-                        Jk516save.fac_num[i]=Disp_buff[i];
+                        Jk510_Set.fac_num[i]=Disp_buff[i];
                     
                     }
                     //Savetoeeprom();

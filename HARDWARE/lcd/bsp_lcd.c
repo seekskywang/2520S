@@ -1011,6 +1011,7 @@ void Disp_R_V(void)
 }
 void Disp_R_Uint(void)
 {
+	Colour.Fword = LCD_COLOR_WHITE;
     switch(Test_Value.uint)
     {
         case 0:

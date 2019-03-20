@@ -116,7 +116,7 @@ void Power_Process(void)
 	InitGlobalValue();//初始化全局变量
 	Read_set_flash();
 //    lcd_image((uint8_t *)gImage_open);
-	Parameter_valuecomp();//比较读出的数据
+//	Parameter_valuecomp();//比较读出的数据
 
     TIM6_Configuration();//定时器6定时10ms
 
@@ -469,7 +469,7 @@ void Setup_Process(void)
 								SetSystemStatus(SYS_STATUS_V_COMP);//电压比较
 							break;
 						case 1:
-                              Jk516save.Set_Data.trip=2;
+                              Jk510_Set.jk510_SSet.trig=2;
 							break;
 //						case 2:
 //                            Jk510_Set.jk510_SSet.speed=2;
@@ -724,7 +724,7 @@ void Test_Process(void)
 	{
        USB_Count++;
         
-        
+        Extrigflag = Read_ExtTrig();
 		
 		 if(Disp_RTCflag)
         {
@@ -743,6 +743,13 @@ void Test_Process(void)
             
         }
 		//Jk510_Set.jk510_SSet.trig=0;
+		if(Jk516save.Set_Data.trip==2)
+		{
+			if(Extrigflag == 0)
+			{
+				test_start = 1;
+			}
+		}
 		 if(Jk510_Set.jk510_SSet.trig==0)
             test_start=1;
 		 if(test_start)
@@ -967,7 +974,15 @@ void Test_Process(void)
 					   if(Jk510_Set.jk510_SSet.mode)//多路显示
 					   {
 						   WriteString_16(110, 26+i*20, "--------",  0);//电阻显示
+						   
 						   WriteString_16(296+30, 26+i*20,"-------- ",  0);//电压显示
+						   WriteString_16(416, 26+i*20, (u8 *)"      ",  0);
+						   WriteString_16(240-10, 26+i*20, (u8 *)"      ",  0);
+						   Colour.black = LCD_COLOR_TEST_BACK;
+						   LCD_DrawFullRect(190,26+i*20,16,16);
+						   Close_Compled();
+							Beep_Out(0);
+							Beep_Off();
 					   }
 					   else
 					   {
@@ -1026,7 +1041,7 @@ void Test_Process(void)
 //							   i=0;
 							   open_flag=1;
 					   
-								//Disp_Open();//增加开路的时候的显示---------------------------
+								Disp_Open();//增加开路的时候的显示---------------------------
 						   }
 						   if(Jk510_Set.jk510_SSet.speed == 0)
 						   {
@@ -1083,8 +1098,32 @@ void Test_Process(void)
 									Hex_Format(jk510_Disp.Disp_Res[i].res,jk510_Disp.Disp_Res[i].dot,5,FALSE );
 									strcpy(&Dispbuff[1],(char *)DispBuf);
 									strcat((char *)Dispbuff,(char *)DISP_UINT[jk510_Disp.Disp_Res[i].uint]);
+									if(Jk510_Set.jk510_SSet.R_Comp)
+										test_Rsorting=R_Comp();
 									if(Jk510_Set.jk510_SSet.mode)
 									{
+										if(Jk510_Set.jk510_SSet.R_Comp==1)//电阻分选
+										{
+											
+											jk510_Disp.Res_state[i]=test_Rsorting;
+											if(test_Rsorting)//不合格
+											{
+												Colour.Fword= LCD_COLOR_RED;
+												Led_Fail_On();
+											}
+											else
+											{
+												Colour.Fword=LCD_COLOR_GREEN;
+												
+												Led_Pass_On();
+											}
+										
+										}
+										 else//电阻不分选
+										{
+											Colour.Fword=LCD_COLOR_WHITE;
+										
+										}
 										WriteString_16(110, 26+i*20, (u8 *)Dispbuff,  0);//显示电阻
 									}
 									else
@@ -1099,16 +1138,7 @@ void Test_Process(void)
 										Dispbuff[0]=' ';
 									Hex_Format(jk510_Disp.Disp_V[i].res,jk510_Disp.Disp_V[i].dot,6,FALSE );
 									strcpy(&Dispbuff[1],(char *)DispBuf);
-									strcat((char *)Dispbuff,(char *)"V");
-									if(Jk510_Set.jk510_SSet.mode)
-									WriteString_16(296+30, 26+i*20,(u8 *)Dispbuff,  0);//显示电压
-									else
-									{
-										Disp_R_Uint();
-										Disp_Testvalue(Test_Value,Test_Value_V,0);//显示电阻和电压  原始的电阻电压显示
-									}
-			//                      ////////////////////////////////////////////////////////////////  
-			//                        
+									strcat((char *)Dispbuff,(char *)" V");
 									if(Jk510_Set.jk510_SSet.V_Comp)
 									{
 										test_Vsorting= V_Comp();
@@ -1116,57 +1146,89 @@ void Test_Process(void)
 											test_Vsorting=2;
 																	
 									}
-									if(Jk510_Set.jk510_SSet.R_Comp)
-										test_Rsorting=R_Comp();
+									if(Jk510_Set.jk510_SSet.mode)
+									{
+										if(Jk510_Set.jk510_SSet.V_Comp==1)//电压分选打开
+										{
+											jk510_Disp.V_State[i]=test_Vsorting;
+											if(test_Vsorting)//不合格
+											{
+												Colour.Fword= LCD_COLOR_RED;
+												Led_Fail_On();
+											}
+											else
+											{
+												Colour.Fword=LCD_COLOR_GREEN;
+											}
+										
+										}
+										else//电压不分选
+										{
+											Colour.Fword=LCD_COLOR_WHITE;
+										}
+										WriteString_16(296+30, 26+i*20,(u8 *)Dispbuff,  0);//显示电压
+									}
+									else
+									{
+										Disp_R_Uint();
+										Disp_Testvalue(Test_Value,Test_Value_V,0);//显示电阻和电压  原始的电阻电压显示
+									}
+			//                      ////////////////////////////////////////////////////////////////  
+			//                        
+									
+									
 			
 			//                        //下面是分选
-								   if(Jk510_Set.V_comp.comp==0&&Jk510_Set.Res_comp.comp==0)//部分选
+								   if(Jk510_Set.jk510_SSet.V_Comp==0&&Jk510_Set.jk510_SSet.R_Comp==0)//部分选
 								   {
 										Close_Compled();//PLC
 								   
 								   }
-									if(Jk510_Set.V_comp.comp==1)//电压分选打开
+									if(Jk510_Set.jk510_SSet.V_Comp==1)//电压分选打开
 									{
 										jk510_Disp.V_State[i]=test_Vsorting;
 										if(test_Vsorting)//不合格
 										{
-											Colour.black= LCD_COLOR_RED;
-											WriteString_16(240, 26+i*20, (u8 *)"FAIL",  0);
+											Colour.Fword= LCD_COLOR_RED;
+											WriteString_16(416, 26+i*20, (u8 *)"V FAIL",  0);
+											Led_Fail_On();
 											
 										}
 										else
 										{
-											Colour.black=LCD_COLOR_GREEN;
-											WriteString_16(240, 26+i*20, (u8 *)"PASS",  0);
+											Colour.Fword=LCD_COLOR_GREEN;
+											WriteString_16(416, 26+i*20, (u8 *)"V PASS",  0);
+											Led_Pass_On();
 										}
 									
 									}
 									else//电压不分选
 									{
-										WriteString_16(240, 26+i*20, (u8 *)"    ",  0);
+										WriteString_16(416, 26+i*20, (u8 *)"      ",  0);
 									
 									}
-									if(Jk510_Set.Res_comp.comp==1)//电阻分选
+									if(Jk510_Set.jk510_SSet.R_Comp==1)//电阻分选
 									{
 										
 										jk510_Disp.Res_state[i]=test_Rsorting;
 										if(test_Rsorting)//不合格
 										{
-											Colour.black= LCD_COLOR_RED;
-											WriteString_16(416, 26+i*20, (u8 *)"FAIL",  0);
+											Colour.Fword= LCD_COLOR_RED;
+											WriteString_16(240-10, 26+i*20, (u8 *)"R FAIL",  0);
+											Led_Fail_On();
 											
 										}
 										else
 										{
-											Colour.black=LCD_COLOR_GREEN;
-											WriteString_16(416, 26+i*20, (u8 *)"PASS",  0);
+											Colour.Fword=LCD_COLOR_GREEN;
+											WriteString_16(240-10, 26+i*20, (u8 *)"R PASS",  0);
 											
 										}
 									
 									}
 									 else//电阻不分选
 									{
-										WriteString_16(416, 26+i*20, (u8 *)"    ",  0);
+										WriteString_16(240-10, 26+i*20, (u8 *)"      ",  0);
 									
 									}
 								
@@ -1403,6 +1465,11 @@ void Test_Process(void)
 					   {
 						   WriteString_16(110, 26+chcount*20, "--------",  0);//电阻显示
 						   WriteString_16(296+30, 26+chcount*20,"--------",  0);//电压显示
+						   WriteString_16(416, 26+i*20, (u8 *)"      ",  0);
+						   WriteString_16(240-10, 26+i*20, (u8 *)"      ",  0);
+						   Close_Compled();
+							Beep_Out(0);
+							Beep_Off();
 					   }
 					   else
 					   {
@@ -1494,9 +1561,32 @@ void Test_Process(void)
 									Hex_Format(jk510_Disp.Disp_Res[chcount].res,jk510_Disp.Disp_Res[chcount].dot,5,FALSE );
 									strcpy(&Dispbuff[1],(char *)DispBuf);
 									strcat((char *)Dispbuff,(char *)DISP_UINT[jk510_Disp.Disp_Res[chcount].uint]);
+									if(Jk510_Set.jk510_SSet.R_Comp)
+										test_Rsorting=R_Comp();
 									if(Jk510_Set.jk510_SSet.mode)
 									{
-										WriteString_16(110, 26+chcount*20, (u8 *)Dispbuff,  0);//显示电阻
+										if(Jk510_Set.jk510_SSet.R_Comp==1)//电阻分选
+										{
+											
+											jk510_Disp.Res_state[i]=test_Rsorting;
+											if(test_Rsorting)//不合格
+											{
+												Colour.Fword= LCD_COLOR_RED;
+												
+											}
+											else
+											{
+												Colour.Fword=LCD_COLOR_GREEN;
+												
+											}
+										
+										}
+										 else//电阻不分选
+										{
+											Colour.Fword=LCD_COLOR_WHITE;
+										
+										}
+										WriteString_16(110, 26+i*20, (u8 *)Dispbuff,  0);//显示电阻
 									}
 									else
 									{
@@ -1511,8 +1601,35 @@ void Test_Process(void)
 									Hex_Format(jk510_Disp.Disp_V[chcount].res,jk510_Disp.Disp_V[chcount].dot,5,FALSE );
 									strcpy(&Dispbuff[1],(char *)DispBuf);
 									strcat((char *)Dispbuff,(char *)" V");
+									if(Jk510_Set.jk510_SSet.V_Comp)
+									{
+										test_Vsorting= V_Comp();
+										if(polarity_v==0)
+											test_Vsorting=2;
+																	
+									}
 									if(Jk510_Set.jk510_SSet.mode)
-									WriteString_16(296+30, 26+chcount*20,(u8 *)Dispbuff,  0);//显示电压
+									{
+										if(Jk510_Set.jk510_SSet.V_Comp==1)//电压分选打开
+										{
+											jk510_Disp.V_State[i]=test_Vsorting;
+											if(test_Vsorting)//不合格
+											{
+												Colour.Fword= LCD_COLOR_RED;
+												Led_Fail_On();
+											}
+											else
+											{
+												Colour.Fword=LCD_COLOR_GREEN;
+											}
+										
+										}
+										else//电压不分选
+										{
+											Colour.Fword=LCD_COLOR_WHITE;
+										}
+										WriteString_16(296+30, 26+i*20,(u8 *)Dispbuff,  0);//显示电压
+									}
 									else
 									{
 										Disp_R_Uint();
@@ -1565,52 +1682,53 @@ void Test_Process(void)
 										test_Rsorting=R_Comp();
 			
 			//                        //下面是分选
-								   if(Jk510_Set.V_comp.comp==0&&Jk510_Set.Res_comp.comp==0)//部分选
+								   if(Jk510_Set.jk510_SSet.V_Comp==0&&Jk510_Set.jk510_SSet.R_Comp==0)//部分选
 								   {
 										Close_Compled();//PLC
 								   
 								   }
-									if(Jk510_Set.V_comp.comp==1)//电压分选打开
+									if(Jk510_Set.jk510_SSet.V_Comp==1)//电压分选打开
 									{
 										jk510_Disp.V_State[chcount]=test_Vsorting;
 										if(test_Vsorting)//不合格
 										{
-											Colour.black= LCD_COLOR_RED;
-											WriteString_16(240, 26+chcount*20, (u8 *)"FAIL",  0);
+											Colour.Fword= LCD_COLOR_RED;
+											WriteString_16(416, 26+i*20, (u8 *)"V FAIL",  0);
+											Led_Fail_On();
 										}
 										else
 										{
-											Colour.black=LCD_COLOR_GREEN;
-											WriteString_16(240, 26+chcount*20, (u8 *)"PASS",  0);
+											Colour.Fword=LCD_COLOR_GREEN;
+											WriteString_16(416, 26+i*20, (u8 *)"V PASS",  0);
+											Led_Pass_On();
 										}
 									
 									}
 									else//电压不分选
 									{
-										WriteString_16(240, 26+chcount*20, (u8 *)"    ",  0);
+										WriteString_16(416, 26+i*20, (u8 *)"    ",  0);
 									
 									}
-									if(Jk510_Set.Res_comp.comp==1)//电阻分选
+									if(Jk510_Set.jk510_SSet.R_Comp==1)//电阻分选
 									{
 										
 										jk510_Disp.Res_state[chcount]=test_Rsorting;
 										if(test_Rsorting)//不合格
 										{
-											Colour.black= LCD_COLOR_RED;
-											WriteString_16(416, 26+chcount*20, (u8 *)"FAIL",  0);
-											
+											Colour.Fword= LCD_COLOR_RED;
+											WriteString_16(240-10, 26+chcount*20, (u8 *)"R FAIL",  0);
+											Led_Fail_On();
 										}
 										else
 										{
-											Colour.black=LCD_COLOR_GREEN;
-											WriteString_16(416, 26+chcount*20, (u8 *)"PASS",  0);
-											
+											Colour.Fword=LCD_COLOR_GREEN;
+											WriteString_16(240-10, 26+chcount*20, (u8 *)"R PASS",  0);
 										}
 									
 									}
 									 else//电阻不分选
 									{
-										WriteString_16(416, 26+chcount*20, (u8 *)"    ",  0);
+										WriteString_16(240-10, 26+chcount*20, (u8 *)"    ",  0);
 									
 									}
 								
@@ -1845,6 +1963,11 @@ void Test_Process(void)
 						   {
 							   WriteString_16(110, 26+i*20, "--------",  0);//电阻显示
 							   WriteString_16(296+30, 26+i*20,"--------",  0);//电压显示
+							   WriteString_16(416, 26+i*20, (u8 *)"      ",  0);
+							   WriteString_16(240-10, 26+i*20, (u8 *)"      ",  0);
+							   Close_Compled();
+								Beep_Out(0);
+								Beep_Off();
 						   }
 						   else
 						   {
@@ -1936,8 +2059,31 @@ void Test_Process(void)
 										Hex_Format(jk510_Disp.Disp_Res[i].res,jk510_Disp.Disp_Res[i].dot,5,FALSE );
 										strcpy(&Dispbuff[1],(char *)DispBuf);
 										strcat((char *)Dispbuff,(char *)DISP_UINT[jk510_Disp.Disp_Res[i].uint]);
+										if(Jk510_Set.jk510_SSet.R_Comp)
+										test_Rsorting=R_Comp();
 										if(Jk510_Set.jk510_SSet.mode)
 										{
+											if(Jk510_Set.jk510_SSet.R_Comp==1)//电阻分选
+											{
+												
+												jk510_Disp.Res_state[i]=test_Rsorting;
+												if(test_Rsorting)//不合格
+												{
+													Colour.Fword= LCD_COLOR_RED;
+													Led_Fail_On();
+												}
+												else
+												{
+													Colour.Fword=LCD_COLOR_GREEN;
+													Led_Pass_On();
+												}
+											
+											}
+											 else//电阻不分选
+											{
+												Colour.Fword=LCD_COLOR_WHITE;
+											
+											}
 											WriteString_16(110, 26+i*20, (u8 *)Dispbuff,  0);//显示电阻
 										}
 										else
@@ -1950,11 +2096,38 @@ void Test_Process(void)
 											Dispbuff[0]='-';
 										else
 											Dispbuff[0]=' ';
-										Hex_Format(jk510_Disp.Disp_V[i].res,jk510_Disp.Disp_V[i].dot,5,FALSE );
+										Hex_Format(jk510_Disp.Disp_V[i].res,jk510_Disp.Disp_V[i].dot,6,FALSE );
 										strcpy(&Dispbuff[1],(char *)DispBuf);
 										strcat((char *)Dispbuff,(char *)" V");
+										if(Jk510_Set.jk510_SSet.V_Comp)
+										{
+											test_Vsorting= V_Comp();
+											if(polarity_v==0)
+												test_Vsorting=2;
+																		
+										}
 										if(Jk510_Set.jk510_SSet.mode)
-										WriteString_16(296+30, 26+i*20,(u8 *)Dispbuff,  0);//显示电压
+										{
+											if(Jk510_Set.jk510_SSet.V_Comp==1)//电压分选打开
+											{
+												jk510_Disp.V_State[i]=test_Vsorting;
+												if(test_Vsorting)//不合格
+												{
+													Colour.Fword= LCD_COLOR_RED;
+													Led_Fail_On();
+												}
+												else
+												{
+													Colour.Fword=LCD_COLOR_GREEN;
+												}
+											
+											}
+											else//电压不分选
+											{
+												Colour.Fword=LCD_COLOR_WHITE;
+											}
+											WriteString_16(296+30, 26+i*20,(u8 *)Dispbuff,  0);//显示电压
+										}
 										else
 										{
 											Disp_R_Uint();
@@ -1973,53 +2146,53 @@ void Test_Process(void)
 											test_Rsorting=R_Comp();
 				
 				//                        //下面是分选
-									   if(Jk510_Set.V_comp.comp==0&&Jk510_Set.Res_comp.comp==0)//部分选
+									   if(Jk510_Set.jk510_SSet.V_Comp==0&&Jk510_Set.jk510_SSet.R_Comp==0)//部分选
 									   {
 											Close_Compled();//PLC
 									   
 									   }
-										if(Jk510_Set.V_comp.comp==1)//电压分选打开
+										if(Jk510_Set.jk510_SSet.V_Comp==1)//电压分选打开
 										{
 											jk510_Disp.V_State[i]=test_Vsorting;
 											if(test_Vsorting)//不合格
 											{
-												Colour.black= LCD_COLOR_RED;
-												WriteString_16(240, 26+i*20, (u8 *)"FAIL",  0);
-												
+												Colour.Fword= LCD_COLOR_RED;
+												WriteString_16(416, 26+i*20, (u8 *)"V FAIL",  0);
+												Led_Fail_On();
 											}
 											else
 											{
-												Colour.black=LCD_COLOR_GREEN;
-												WriteString_16(240, 26+i*20, (u8 *)"PASS",  0);
+												Colour.Fword=LCD_COLOR_GREEN;
+												WriteString_16(416, 26+i*20, (u8 *)"V PASS",  0);
+												Led_Pass_On();
 											}
 										
 										}
 										else//电压不分选
 										{
-											WriteString_16(240, 26+i*20, (u8 *)"    ",  0);
+											WriteString_16(416, 26+i*20, (u8 *)"    ",  0);
 										
 										}
-										if(Jk510_Set.Res_comp.comp==1)//电阻分选
+										if(Jk510_Set.jk510_SSet.R_Comp==1)//电阻分选
 										{
 											
 											jk510_Disp.Res_state[i]=test_Rsorting;
 											if(test_Rsorting)//不合格
 											{
-												Colour.black= LCD_COLOR_RED;
-												WriteString_16(416, 26+i*20, (u8 *)"FAIL",  0);
-												
+												Colour.Fword= LCD_COLOR_RED;
+												WriteString_16(240-10, 26+i*20, (u8 *)"R FAIL",  0);
+												Led_Fail_On();
 											}
 											else
 											{
-												Colour.black=LCD_COLOR_GREEN;
-												WriteString_16(416, 26+i*20, (u8 *)"PASS",  0);
-												
+												Colour.Fword=LCD_COLOR_GREEN;
+												WriteString_16(240-10, 26+i*20, (u8 *)"R PASS",  0);
 											}
 										
 										}
 										 else//电阻不分选
 										{
-											WriteString_16(416, 26+i*20, (u8 *)"    ",  0);
+											WriteString_16(240-10, 26+i*20, (u8 *)"    ",  0);
 										
 										}
 									
@@ -3420,7 +3593,6 @@ void Setup_V_Comp_Process(void)
 			DispSetV_value(keynum);
            
 			Disp_Flag=0;
-		
 		}
 
         key=Key_Read_WithTimeOut(TICKS_PER_SEC_SOFTTIMER/10);
@@ -3453,7 +3625,7 @@ void Setup_V_Comp_Process(void)
                                     
                                     Coordinates.ypos= FIRSTLINE+SPACE1*(keynum-2);
                                     Coordinates.lenth=90;
-                                    Jk510_Set.V_comp.V_Hi[keynum-2]=Disp_Set_Num(&Coordinates);
+                                    Jk510_Set.V_comp.V_Hi[keynum-2]=Disp_Set_CompNum(&Coordinates);
                                 }
                                 else
                                 {
@@ -3461,7 +3633,7 @@ void Setup_V_Comp_Process(void)
                                     Coordinates.xpos=LIST2+88+20;
                                     Coordinates.ypos=FIRSTLINE+SPACE1*(keynum-12);
                                     Coordinates.lenth=90;
-                                    Jk510_Set.V_comp.V_Lo[keynum-12]=Disp_Set_Num(&Coordinates);
+                                    Jk510_Set.V_comp.V_Lo[keynum-12]=Disp_Set_CompNum(&Coordinates);
                                 
                                 }
                             }else
@@ -3472,7 +3644,7 @@ void Setup_V_Comp_Process(void)
                                     
                                     Coordinates.ypos= FIRSTLINE;
                                     Coordinates.lenth=90;
-                                    Jk510_Set.V_comp.V_Hi[0]=Disp_Set_Num(&Coordinates);
+                                    Jk510_Set.V_comp.V_Hi[0]=Disp_Set_CompNum(&Coordinates);
                                     for(i=1;i<10;i++)
                                         Jk510_Set.V_comp.V_Hi[i]=Jk510_Set.V_comp.V_Hi[0];
                                 }
@@ -3482,7 +3654,7 @@ void Setup_V_Comp_Process(void)
                                     Coordinates.xpos=LIST2+88+20;
                                     Coordinates.ypos=FIRSTLINE;
                                     Coordinates.lenth=90;
-                                    Jk510_Set.V_comp.V_Lo[0]=Disp_Set_Num(&Coordinates);
+                                    Jk510_Set.V_comp.V_Lo[0]=Disp_Set_CompNum(&Coordinates);
                                     for(i=1;i<10;i++)
                                         Jk510_Set.V_comp.V_Lo[i]=Jk510_Set.V_comp.V_Lo[0];
                                 

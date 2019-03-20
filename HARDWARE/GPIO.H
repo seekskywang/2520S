@@ -34,6 +34,7 @@ void EXTI_Ads1251_Config(void);
 
 void Select_V_I(u8 ch);//1  µçÁ÷  0  µçÑ¹
 u8 Read_Openflag(void);
+u8 Read_ExtTrig(void);
 u8 read_cpld(void);
 void Power_On_led(void);
 void Power_Off_led(void);

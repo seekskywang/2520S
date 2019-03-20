@@ -35,7 +35,7 @@ int main(void)
                 break;
 			case SYS_STATUS_DEBUG:
 				Use_DebugProcess();//调试处理
-				break;
+				break;	
 
 			case SYS_STATUS_RESET:
 				//Reset_Process();//软件复位处理
