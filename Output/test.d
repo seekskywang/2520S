@@ -88,3 +88,4 @@
 ..\..\output\test.o: ..\..\Libraries\STM32_USB_HOST_Library\Class\MSC\inc\usbh_msc_core.h
 ..\..\output\test.o: ..\..\User\./APP/usbh_usr.h
 ..\..\output\test.o: ..\..\User\./RTC/bsp_rtc.h
+..\..\output\test.o: ..\..\User\open.h

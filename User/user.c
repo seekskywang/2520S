@@ -377,7 +377,7 @@ const uint8_t BiasButton_Tip[][7+1]=  //频率选择时候的下面的提示符号
 
 const uint8_t Sys_Sys[][20+1]=
 {
-	{"仪器型号  JK2520S"},
+	{"仪器型号  jh8210C"},
 	{"软件版本  Ver:1.1"},
 	{"硬件版本  Ver:1.1"},
 	{"仪器编号"},
@@ -388,7 +388,7 @@ const uint8_t Sys_Sys[][20+1]=
 };
 const uint8_t Sys_Sys_E[][20+1]=
 {
-	{"INST MODEL  JK2520S"},
+	{"INST MODEL  jh8210C"},
 	{"SOFT VER   Ver:1.1"},
 	{"HARD VER   Ver:1.1"},
 	{"SERIALNO"},
@@ -4348,6 +4348,26 @@ void Use_SysSetProcess(void)
     //lcd_Clear(LCD_COLOR_TEST_BACK);
 	Disp_Sys_Item();
 	//Delay_Key();
+	if(Jk510_Set.Sys_Setvalue.uart > 10)
+	{
+		Jk510_Set.Sys_Setvalue.uart = 0;
+	}
+	if(Jk510_Set.Sys_Setvalue.lanage > 10)
+	{
+		Jk510_Set.Sys_Setvalue.lanage = 0;
+	}
+	if(Jk510_Set.Sys_Setvalue.u_flag > 10)
+	{
+		Jk510_Set.Sys_Setvalue.u_flag = 0;
+	}
+	if(Jk510_Set.Sys_Setvalue.buard > 10)
+	{
+		Jk510_Set.Sys_Setvalue.buard = 0;
+	}
+	if(Jk510_Set.Sys_Setvalue.plc > 10)
+	{
+		Jk510_Set.Sys_Setvalue.plc = 0;
+	}
  	while(GetSystemStatus()==SYS_STATUS_SYSSET)
 	{
 	  	

@@ -5,7 +5,7 @@
 #include "./APP/usbh_bsp.h"
 #include "./RTC/bsp_rtc.h"
 #include "bsp_exti.h"
-//#include "open.h"
+#include "open.h"
 
 
 
@@ -115,7 +115,7 @@ void Power_Process(void)
 
 	InitGlobalValue();//初始化全局变量
 	Read_set_flash();
-//    lcd_image((uint8_t *)gImage_open);
+    lcd_image((uint8_t *)gImage_open);
 //	Parameter_valuecomp();//比较读出的数据
 
     TIM6_Configuration();//定时器6定时10ms
