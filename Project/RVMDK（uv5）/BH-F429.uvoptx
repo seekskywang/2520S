@@ -168,7 +168,7 @@
           <Type>0</Type>
           <LineNumber>801</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134254080</Address>
+          <Address>134253678</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -184,7 +184,7 @@
           <Type>0</Type>
           <LineNumber>974</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134254926</Address>
+          <Address>134254524</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -266,7 +266,7 @@
         <Ww>
           <count>10</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jk510_Disp.Disp_V</ItemText>
+          <ItemText>jk510_Disp.Disp_V,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>11</count>
@@ -422,6 +422,21 @@
           <count>41</count>
           <WinNumber>1</WinNumber>
           <ItemText>set_lowvalue,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>42</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>Jk510_Set.channel_sellect[i]</ItemText>
+        </Ww>
+        <Ww>
+          <count>43</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>Jk510_Set.channel_sellect</ItemText>
+        </Ww>
+        <Ww>
+          <count>44</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>chcount</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

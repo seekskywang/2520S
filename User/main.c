@@ -14,8 +14,6 @@ int main(void)
 
 	while(1)
 	{
-        
-		
 		switch(GetSystemStatus())
 		{
 			case SYS_STATUS_POWER:

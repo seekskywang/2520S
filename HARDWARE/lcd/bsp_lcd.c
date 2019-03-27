@@ -997,7 +997,7 @@ void Disp_R_V(void)
     //LCD_DisplayChar(0,TESTVALUE_Y+32, 'R');//( TESTVALUE_X-32, TESTVALUE_Y, "R",0 );
 	//LCD_ShowFontCN_40_55(0,92,40,55,(uint8_t*)Out_Assic+5*40*55/8);//R
 //	
-	
+	Colour.Fword = LCD_COLOR_WHITE;
 	LCD_ShowFontCN_40_55(60+40*7,92,40,55,(uint8_t*)Out_Assic+20*40*55/8);//¦¸
 	//LCD_ShowFontCN_40_55(0,92+55,40,55,(uint8_t*)Out_Assic+27*40*55/8);//V
 //	

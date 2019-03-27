@@ -250,7 +250,7 @@ u8 GetSoftTimerOut(u8 id);
 
 #define PW_LENGTH 			(4)//最大密码位数
 
-#define RANGE_MAX 			(3)//最大量程
+#define RANGE_MAX 			(2)//最大量程
 
 #define RANGE_V_MAX         (1)
 
@@ -263,7 +263,7 @@ u8 GetSoftTimerOut(u8 id);
 #define PASSWORD_LENTH  8
 
 #define NUM_LENTH 			(6)//显示长度
-#define NUM_LENTH_V 			(7)//显示长度
+#define NUM_LENTH_V 		(7)//显示长度
 #define MAX_DOTNUM          (5)//最长的小数点
 
 //==========================================================

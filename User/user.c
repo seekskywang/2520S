@@ -600,123 +600,166 @@ void InitGlobalValue(void)
 void Parameter_valuecomp(void)
 {
 	u8 i;
+	for(i=0;i<10;i++)
+	{
+		if(Jk510_Set.channel_sellect[i]>2)
+		{
+			Jk510_Set.channel_sellect[i]=1;
+		}
+	}
+	if(Jk510_Set.jk510_SSet.trig > 10)
+	{
+		Jk510_Set.jk510_SSet.trig=0;
+	}
+	if(Jk510_Set.jk510_SSet.beep > 10)
+	{
+		Jk510_Set.jk510_SSet.beep=0;
+	}
+	if(Jk510_Set.jk510_SSet.mode > 10)
+	{
+		Jk510_Set.jk510_SSet.mode=0;
+	}
+	if(Jk510_Set.jk510_SSet.Range > 10)
+	{
+		Jk510_Set.jk510_SSet.Range=0;
+	}
+	if(Jk510_Set.jk510_SSet.Range_set > 10)
+	{
+		Jk510_Set.jk510_SSet.Range_set=0;
+	}
+	if(Jk510_Set.jk510_SSet.R_Comp > 10)
+	{
+		Jk510_Set.jk510_SSet.R_Comp=0;
+	}
+	if(Jk510_Set.jk510_SSet.speed > 10)
+	{
+		Jk510_Set.jk510_SSet.speed=0;
+	}
+	if(Jk510_Set.jk510_SSet.S_Trig > 10)
+	{
+		Jk510_Set.jk510_SSet.S_Trig=0;
+	}
+	if(Jk510_Set.jk510_SSet.V_Comp > 10)
+	{
+		Jk510_Set.jk510_SSet.V_Comp=0;
+	}
 //	u8 *pt;
 //	for(i=0;i<PARAMETER_MENU_MAX;i++)
 //	{	pt=(u8* )&Jk516save.Set_Data;
 //		if(*pt>ParameterLimit[i][0])
 //            *pt=ParameterLimit[i][1];
 //	}
-    if(Jk516save.Set_Data.trip>2)
-        Jk516save.Set_Data.trip=0;
-    if(Jk516save.Set_Data.speed>3)
-        Jk516save.Set_Data.speed=0;
-    if(Jk516save.Set_Data.Res_comp>1)
-        Jk516save.Set_Data.Res_comp=0;
-    if(Jk516save.Set_Data.V_low.Dot>5)
-        Jk516save.Set_Data.V_low.Dot=3;
-    if(Jk516save.Set_Data.V_low.Num>1200000)
-        Jk516save.Set_Data.V_low.Num=120000;
-    if(Jk516save.Set_Data.V_low.Unit>5)
-        Jk516save.Set_Data.V_low.Unit=0;
-    if(Jk516save.Set_Data.Range>10)
-        Jk516save.Set_Data.Range=0;
-    if(Jk516save.Set_Data.Range_Set>10)
-        Jk516save.Set_Data.Range_Set=0;
-    if(Jk516save.Set_Data.beep>3)
-        Jk516save.Set_Data.beep=0;
-    if(Jk516save.Set_Data.V_comp>1)
-        Jk516save.Set_Data.V_comp=0;
-    
-    if(Jk516save.Set_Data.Nominal_Res.Dot>5)
-        Jk516save.Set_Data.Nominal_Res.Dot=3;
-    if(Jk516save.Set_Data.Nominal_Res.Num>1200000)
-        Jk516save.Set_Data.Nominal_Res.Num=12000;
-    if(Jk516save.Set_Data.Nominal_Res.Unit>5)
-        Jk516save.Set_Data.Nominal_Res.Unit=0;
-    
-    if(Jk516save.Set_Data.High_Res.Dot>5)
-        Jk516save.Set_Data.High_Res.Dot=3;
-    if(Jk516save.Set_Data.High_Res.Num>120000)
-        Jk516save.Set_Data.High_Res.Num=12000;
-    if(Jk516save.Set_Data.High_Res.Unit>5)
-        Jk516save.Set_Data.High_Res.Unit=0;
-    
-    if(Jk516save.Set_Data.Res_low.Dot>5)
-        Jk516save.Set_Data.Res_low.Dot=3;
-    if(Jk516save.Set_Data.Res_low.Num>120000)
-        Jk516save.Set_Data.Res_low.Num=12000;
-    if(Jk516save.Set_Data.Res_low.Unit>5)
-        Jk516save.Set_Data.Res_low.Unit=0;
-    
-    if(Jk516save.Set_Data.Nominal_V.Dot>5)
-        Jk516save.Set_Data.Nominal_V.Dot=3;
-    if(Jk516save.Set_Data.Nominal_V.Num>1200000)
-        Jk516save.Set_Data.Nominal_V.Num=120000;
-    if(Jk516save.Set_Data.Nominal_V.Unit>5)
-        Jk516save.Set_Data.Nominal_V.Unit=0;
-    
-    
-    
-    if(Jk516save.Set_Data.V_high.Dot>5)
-        Jk516save.Set_Data.V_high.Dot=3;
-    if(Jk516save.Set_Data.V_high.Num>1200000)
-        Jk516save.Set_Data.V_high.Num=120000;
-    if(Jk516save.Set_Data.V_high.Unit>5)
-        Jk516save.Set_Data.V_high.Unit=0;
-    
-    if(Jk516save.Sys_Setvalue.buard>10)
-        Jk516save.Sys_Setvalue.buard=0;
-    if(Jk516save.Sys_Setvalue.lanage>1)
-        Jk516save.Sys_Setvalue.lanage=0;
-    if(Jk516save.Sys_Setvalue.plc>1)
-        Jk516save.Sys_Setvalue.plc=0;
-    if(Jk516save.Sys_Setvalue.uart>1)
-        Jk516save.Sys_Setvalue.uart=0;
-    if(Jk516save.Sys_Setvalue.u_flag>1)
-        Jk516save.Sys_Setvalue.u_flag=0;
-    for(i=0;i<20;i++)
-    {
-        if(Jk516save.Sys_Setvalue.textname[i]>128)
-            Jk516save.Sys_Setvalue.textname[i]=0;
-            
-    
-    }
-    for(i=0;i<10;i++)
-    {
-        if(Jk516save.fac_num[i]>128)
-        {
-            if(i<8)
-                Jk516save.fac_num[i]='0';
-            else
-                Jk516save.fac_num[i]=0;
-                
-        }
-		
-		if(Jk510_Set.Res_comp.Res_Hi[i].Dot>4)
-			Jk510_Set.Res_comp.Res_Hi[i].Dot=2;
-		
-		if(Jk510_Set.Res_comp.Res_Lo[i].Dot>4)
-			Jk510_Set.Res_comp.Res_Lo[i].Dot=2;
-		
-		if(Jk510_Set.V_comp.V_Hi[i].Dot>4)
-			Jk510_Set.V_comp.V_Hi[i].Dot=2;
-		if(Jk510_Set.V_comp.V_Lo[i].Dot>4)
-			Jk510_Set.V_comp.V_Lo[i].Dot=2;
-		
-		if(Jk510_Set.Res_comp.Res_Hi[i].Unit>4)
-			Jk510_Set.Res_comp.Res_Hi[i].Unit=2;
-		
-		if(Jk510_Set.Res_comp.Res_Lo[i].Unit>4)
-			Jk510_Set.Res_comp.Res_Lo[i].Unit=2;
-		
-		if(Jk510_Set.V_comp.V_Hi[i].Unit>4)
-			Jk510_Set.V_comp.V_Hi[i].Unit=2;
-		if(Jk510_Set.V_comp.V_Lo[i].Unit>4)
-			Jk510_Set.V_comp.V_Lo[i].Unit=2;
-    
-    }
-    if(Jk510_Set.jk510_SSet.mode>1)
-		Jk510_Set.jk510_SSet.mode=0;
+//    if(Jk516save.Set_Data.trip>2)
+//        Jk516save.Set_Data.trip=0;
+//    if(Jk516save.Set_Data.speed>3)
+//        Jk516save.Set_Data.speed=0;
+//    if(Jk516save.Set_Data.Res_comp>1)
+//        Jk516save.Set_Data.Res_comp=0;
+//    if(Jk516save.Set_Data.V_low.Dot>5)
+//        Jk516save.Set_Data.V_low.Dot=3;
+//    if(Jk516save.Set_Data.V_low.Num>1200000)
+//        Jk516save.Set_Data.V_low.Num=120000;
+//    if(Jk516save.Set_Data.V_low.Unit>5)
+//        Jk516save.Set_Data.V_low.Unit=0;
+//    if(Jk516save.Set_Data.Range>10)
+//        Jk516save.Set_Data.Range=0;
+//    if(Jk516save.Set_Data.Range_Set>10)
+//        Jk516save.Set_Data.Range_Set=0;
+//    if(Jk516save.Set_Data.beep>3)
+//        Jk516save.Set_Data.beep=0;
+//    if(Jk516save.Set_Data.V_comp>1)
+//        Jk516save.Set_Data.V_comp=0;
+//    
+//    if(Jk516save.Set_Data.Nominal_Res.Dot>5)
+//        Jk516save.Set_Data.Nominal_Res.Dot=3;
+//    if(Jk516save.Set_Data.Nominal_Res.Num>1200000)
+//        Jk516save.Set_Data.Nominal_Res.Num=12000;
+//    if(Jk516save.Set_Data.Nominal_Res.Unit>5)
+//        Jk516save.Set_Data.Nominal_Res.Unit=0;
+//    
+//    if(Jk516save.Set_Data.High_Res.Dot>5)
+//        Jk516save.Set_Data.High_Res.Dot=3;
+//    if(Jk516save.Set_Data.High_Res.Num>120000)
+//        Jk516save.Set_Data.High_Res.Num=12000;
+//    if(Jk516save.Set_Data.High_Res.Unit>5)
+//        Jk516save.Set_Data.High_Res.Unit=0;
+//    
+//    if(Jk516save.Set_Data.Res_low.Dot>5)
+//        Jk516save.Set_Data.Res_low.Dot=3;
+//    if(Jk516save.Set_Data.Res_low.Num>120000)
+//        Jk516save.Set_Data.Res_low.Num=12000;
+//    if(Jk516save.Set_Data.Res_low.Unit>5)
+//        Jk516save.Set_Data.Res_low.Unit=0;
+//    
+//    if(Jk516save.Set_Data.Nominal_V.Dot>5)
+//        Jk516save.Set_Data.Nominal_V.Dot=3;
+//    if(Jk516save.Set_Data.Nominal_V.Num>1200000)
+//        Jk516save.Set_Data.Nominal_V.Num=120000;
+//    if(Jk516save.Set_Data.Nominal_V.Unit>5)
+//        Jk516save.Set_Data.Nominal_V.Unit=0;
+//    
+//    
+//    
+//    if(Jk516save.Set_Data.V_high.Dot>5)
+//        Jk516save.Set_Data.V_high.Dot=3;
+//    if(Jk516save.Set_Data.V_high.Num>1200000)
+//        Jk516save.Set_Data.V_high.Num=120000;
+//    if(Jk516save.Set_Data.V_high.Unit>5)
+//        Jk516save.Set_Data.V_high.Unit=0;
+//    
+//    if(Jk516save.Sys_Setvalue.buard>10)
+//        Jk516save.Sys_Setvalue.buard=0;
+//    if(Jk516save.Sys_Setvalue.lanage>1)
+//        Jk516save.Sys_Setvalue.lanage=0;
+//    if(Jk516save.Sys_Setvalue.plc>1)
+//        Jk516save.Sys_Setvalue.plc=0;
+//    if(Jk516save.Sys_Setvalue.uart>1)
+//        Jk516save.Sys_Setvalue.uart=0;
+//    if(Jk516save.Sys_Setvalue.u_flag>1)
+//        Jk516save.Sys_Setvalue.u_flag=0;
+//    for(i=0;i<20;i++)
+//    {
+//        if(Jk516save.Sys_Setvalue.textname[i]>128)
+//            Jk516save.Sys_Setvalue.textname[i]=0;
+//            
+//    
+//    }
+//    for(i=0;i<10;i++)
+//    {
+//        if(Jk516save.fac_num[i]>128)
+//        {
+//            if(i<8)
+//                Jk516save.fac_num[i]='0';
+//            else
+//                Jk516save.fac_num[i]=0;
+//                
+//        }
+//		
+//		if(Jk510_Set.Res_comp.Res_Hi[i].Dot>4)
+//			Jk510_Set.Res_comp.Res_Hi[i].Dot=2;
+//		
+//		if(Jk510_Set.Res_comp.Res_Lo[i].Dot>4)
+//			Jk510_Set.Res_comp.Res_Lo[i].Dot=2;
+//		
+//		if(Jk510_Set.V_comp.V_Hi[i].Dot>4)
+//			Jk510_Set.V_comp.V_Hi[i].Dot=2;
+//		if(Jk510_Set.V_comp.V_Lo[i].Dot>4)
+//			Jk510_Set.V_comp.V_Lo[i].Dot=2;
+//		
+//		if(Jk510_Set.Res_comp.Res_Hi[i].Unit>4)
+//			Jk510_Set.Res_comp.Res_Hi[i].Unit=2;
+//		
+//		if(Jk510_Set.Res_comp.Res_Lo[i].Unit>4)
+//			Jk510_Set.Res_comp.Res_Lo[i].Unit=2;
+//		
+//		if(Jk510_Set.V_comp.V_Hi[i].Unit>4)
+//			Jk510_Set.V_comp.V_Hi[i].Unit=2;
+//		if(Jk510_Set.V_comp.V_Lo[i].Unit>4)
+//			Jk510_Set.V_comp.V_Lo[i].Unit=2;
+//    
+//    }
+//    if(Jk510_Set.jk510_SSet.mode>1)
+//		Jk510_Set.jk510_SSet.mode=0;
 //    for(i=0;i<RANGE_MAX+2;i++)
 //    {
 //        if((Jk516save.Debug_Value[i].ad_value>Debug_Limit[0])||(Jk516save.Debug_Value[i].ad_value<Debug_Limit[1]))
@@ -1292,7 +1335,7 @@ void Range_Changecomp(void)
 	}
 	f_switch=FALSE;//量程切换标志
 	//f_switch=TRUE;
-	if(Jk516save.Set_Data.Range_Set==0)
+	if(Jk510_Set.jk510_SSet.Range_set==0 || GetSystemStatus()==SYS_STATUS_CLEAR)
 	{
 		if((Range<RANGE_MAX)&&(f_upper==TRUE))//量程非最高且低压
 		{
@@ -1313,7 +1356,9 @@ void Range_Changecomp(void)
 			ffit_data1=0;
 			count_ffit=0;
 		}
-        if(Range_Value_V>RANGE_LIMIT_VHIGH)//高于量程上限Ad_value
+        
+    }
+	if(Range_Value_V>RANGE_LIMIT_VHIGH)//高于量程上限Ad_value
         {
             V_upper=TRUE;//量程过压标志
             V_below=FALSE;//量程欠压标志
@@ -1345,7 +1390,6 @@ void Range_Changecomp(void)
             V_switch=TRUE;//量程切换标志
            
         }
-    }
 	if((f_switch==TRUE)||(V_switch==TRUE))//量程切换标志
 	{
         range_over=1;//增加不换档标志，用于查看是否在稳定的量程测量的
@@ -1837,13 +1881,13 @@ u8 Comp_choice(void)//三种模式分选
 }
 void Beep_Out(u8 flag)
 {
-    if(Jk516save.Set_Data.beep==0)
+    if(Jk510_Set.jk510_SSet.beep==0)
         Beep_Off();
     else
     {
         if(flag==0)//合格
         {
-            if(Jk516save.Set_Data.beep==1)//合格响
+            if(Jk510_Set.jk510_SSet.beep==1)//合格响
             {
                 Beep_On();
             }
@@ -1852,7 +1896,7 @@ void Beep_Out(u8 flag)
         }
         else//不合格
         {
-            if(Jk516save.Set_Data.beep==2)//不合格响
+            if(Jk510_Set.jk510_SSet.beep==2)//不合格响
             {
                 Beep_On();
             }
@@ -3572,7 +3616,7 @@ void DispSetV_value(u8 keynum)
     {
         Colour.black=LCD_COLOR_TEST_BACK;
     }
-    LCD_DrawFullRect(LIST2+70, 4, SELECT_2END-(LIST2+70), SPACE1-4);
+    LCD_DrawFullRect(LIST2+70, 4, SELECT_2END-(LIST2+70-10), SPACE1-4);
     if(Jk510_Set.V_comp.mode>1)
         Jk510_Set.V_comp.mode=0;
 	if(Jk510_Set.Sys_Setvalue.lanage)
@@ -3594,10 +3638,10 @@ void DispSetV_value(u8 keynum)
                 Colour.black=LCD_COLOR_TEST_BACK;
             }
             Hex_Format(Jk510_Set.V_comp.V_Hi[i-2].Num , Jk510_Set.V_comp.V_Hi[i-2].Dot , 6 , 0);
-            LCD_DrawFullRect(LIST1+88+20, FIRSTLINE+SPACE1*(i-2), SELECT_1END-(LIST1+70), SPACE1-4);
-			strcat((char *)DispBuf,(char *)" V");
+            LCD_DrawFullRect(LIST1+88+20, FIRSTLINE+SPACE1*(i-2), SELECT_1END-(LIST1+70-10), SPACE1-4);
+			strcat((char *)DispBuf,(char *)"V");
 //            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Hi[i-2].Unit]);
-            WriteString_16(LIST1+88+20+10, FIRSTLINE+SPACE1*(i-2), DispBuf,  0);
+            WriteString_16(LIST1+88+20, FIRSTLINE+SPACE1*(i-2), DispBuf,  0);
            // WriteString_16(LIST1+90+8*7+2, FIRSTLINE+SPACE1*(i-2),DISP_UINT[Jk510_Set.Res_comp.Res_Hi[i-2].Unit],  0);
         
         }
@@ -3614,10 +3658,10 @@ void DispSetV_value(u8 keynum)
                 Colour.black=LCD_COLOR_TEST_BACK;
             }
             Hex_Format(Jk510_Set.V_comp.V_Lo[i-2].Num , Jk510_Set.V_comp.V_Lo[i-2].Dot , 6 , 0);
-            LCD_DrawFullRect(LIST2+88+20+10, FIRSTLINE+SPACE1*(i-2), SELECT_2END-(LIST2+70), SPACE1-4);
-			strcat((char *)DispBuf,(char *)" V");
+            LCD_DrawFullRect(LIST2+88+20, FIRSTLINE+SPACE1*(i-2), SELECT_2END-(LIST2+70-10), SPACE1-4);
+			strcat((char *)DispBuf,(char *)"V");
 //            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Lo[i-2].Unit]);
-            WriteString_16(LIST2+88+20+10, FIRSTLINE+SPACE1*(i-2), DispBuf,  0);
+            WriteString_16(LIST2+88+20, FIRSTLINE+SPACE1*(i-2), DispBuf,  0);
            // WriteString_16(LIST2+90+8*7+2, FIRSTLINE+SPACE1*(i-2),DISP_UINT[Jk510_Set.Res_comp.Res_Lo[i-2].Unit],  0);
         
         }
@@ -3636,8 +3680,8 @@ void DispSetV_value(u8 keynum)
                 Colour.black=LCD_COLOR_TEST_BACK;
             }
             Hex_Format(Jk510_Set.V_comp.V_Hi[0].Num , Jk510_Set.V_comp.V_Hi[0].Dot , 6 , 0);
-            LCD_DrawFullRect(LIST1+88+20, FIRSTLINE, SELECT_1END-(LIST1+70), SPACE1-4);
-			strcat((char *)DispBuf,(char *)" V");
+            LCD_DrawFullRect(LIST1+88+20, FIRSTLINE, SELECT_1END-(LIST1+70-10), SPACE1-4);
+			strcat((char *)DispBuf,(char *)"V");
 //            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Hi[0].Unit]);
             WriteString_16(LIST1+88+20, FIRSTLINE, DispBuf,  0);
         
@@ -3651,8 +3695,8 @@ void DispSetV_value(u8 keynum)
                 Colour.black=LCD_COLOR_TEST_BACK;
             }
             Hex_Format(Jk510_Set.V_comp.V_Lo[0].Num , Jk510_Set.V_comp.V_Lo[0].Dot , 6 , 0);
-            LCD_DrawFullRect(LIST2+88+20, FIRSTLINE, SELECT_2END-(LIST2+70), SPACE1-4);
-			strcat((char *)DispBuf,(char *)" V");
+            LCD_DrawFullRect(LIST2+88+20, FIRSTLINE, SELECT_2END-(LIST2+70-10), SPACE1-4);
+			strcat((char *)DispBuf,(char *)"V");
 //            strcat((char *)DispBuf,(char *)DISP_UINT[Jk510_Set.V_comp.V_Lo[0].Unit]);
             WriteString_16(LIST2+88+20, FIRSTLINE, DispBuf,  0);
     
