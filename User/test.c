@@ -2423,7 +2423,7 @@ void Test_Process(void)
         }
              
 		Uart_Process();//串口处理
-        if(Keyboard.state==TRUE)
+        if(Keyboard.state==TRUE && GetSystemStatus() != SYS_STATUS_CLEAR)
         {
             Disp_Flag=1;
             key=Key_Read();
@@ -3102,8 +3102,8 @@ void Clear_Process(void)
 			while(GetSystemStatus()==SYS_STATUS_CLEAR)
 			
 			{
-				if(Keyboard.state==TRUE)
-					break;
+//				if(Keyboard.state==TRUE)
+//					break;
 				Relay_Select(i);//10路继电器循环工作一遍
 				if(Jk510_Set.jk510_SSet.speed == 0)
 				{
@@ -3238,8 +3238,8 @@ void Clear_Process(void)
 		SetSystemStatus(SYS_STATUS_CLEAR);
 		while(GetSystemStatus()==SYS_STATUS_CLEAR)	
 		{
-			if(Keyboard.state==TRUE)
-				break;
+//			if(Keyboard.state==TRUE)
+//				break;
 //				Relay_Select(i);//10路继电器循环工作一遍
 //				delay_ms(150);
 			

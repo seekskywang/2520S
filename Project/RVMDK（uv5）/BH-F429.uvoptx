@@ -168,7 +168,7 @@
           <Type>0</Type>
           <LineNumber>801</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134253678</Address>
+          <Address>134253690</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -184,7 +184,7 @@
           <Type>0</Type>
           <LineNumber>974</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134254524</Address>
+          <Address>134254532</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -437,6 +437,11 @@
           <count>44</count>
           <WinNumber>1</WinNumber>
           <ItemText>chcount</ItemText>
+        </Ww>
+        <Ww>
+          <count>45</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_tModS.RxBuf</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
