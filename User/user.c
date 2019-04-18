@@ -1301,6 +1301,108 @@ void Range_Control(u8 dat,u8 V_Range)
 //修改日期：2015.10.29 13:35
 //备注说明：无
 //==========================================================
+//void Range_Changecomp(void)
+//{
+//	
+////	bool f_disp=FALSE;//显示标志
+//	bool f_upper=FALSE;//量程过压标志
+//	bool f_below=FALSE;//量程欠压标志
+//	bool f_switch=FALSE;//量程切换标志
+//    bool V_upper=FALSE;//量程过压标志
+//	bool V_below=FALSE;//量程欠压标志
+//	bool V_switch=FALSE;//量程切换标志
+//	u8 i;
+//	//量程自动换挡处?
+//    
+//	if(Range_value>RANGR_LIMIT_HIGH)//高于量程上限Ad_value
+//	{
+//		f_upper=TRUE;//量程过压标志
+//		f_below=FALSE;//量程欠压标志
+//		for(i=0;i<FIT_INUM;i++)
+//			i_buff[i]=0;
+//			ffit_data1=0;
+//			count_ffit=0;
+//	}
+//	else if(Range_value<RANGR_LIMIT_LOW)//低于量程下限
+//	{
+//		f_below=TRUE;//量程低压标志
+//		f_upper=FALSE;//量程欠压标志
+//	}
+//	else
+//	{
+//		f_upper=FALSE;//量程过压标志
+//		f_below=FALSE;//量程欠压标志
+//	}
+//	f_switch=FALSE;//量程切换标志
+//	//f_switch=TRUE;
+//	if(Jk510_Set.jk510_SSet.Range_set==0 || GetSystemStatus()==SYS_STATUS_CLEAR)
+//	{
+//		if((Range<RANGE_MAX)&&(f_upper==TRUE))//量程非最高且低压
+//		{
+//			Range++;
+//			f_switch=TRUE;//量程切换标志
+//			for(i=0;i<FIT_INUM;i++)
+//			i_buff[i]=0;
+//			ffit_data1=0;
+//			count_ffit=0;
+//		} 
+//        else
+//		if((Range>=1)&&(f_below==TRUE))//量程非最低且过压
+//		{
+//			Range--;
+//			f_switch=TRUE;//量程切换标志
+//			for(i=0;i<FIT_INUM;i++)
+//			i_buff[i]=0;
+//			ffit_data1=0;
+//			count_ffit=0;
+//		}
+//        
+//    }
+//	if(Range_Value_V>RANGE_LIMIT_VHIGH)//高于量程上限Ad_value
+//        {
+//            V_upper=TRUE;//量程过压标志
+//            V_below=FALSE;//量程欠压标志
+//            
+//        }
+//        else if(Range_Value_V<RANGE_LIMIT_VLOW)//低于量程下限
+//        {
+//            V_below=TRUE;//量程低压标志
+//            V_upper=FALSE;//量程欠压标志
+//        }
+//        else
+//        {
+//            V_upper=FALSE;//量程过压标志
+//            V_below=FALSE;//量程欠压标志
+//        }
+//        V_switch=FALSE;//量程切换标志
+//        //f_switch=TRUE;
+//        
+//        if((V_Range<RANGE_V_MAX)&&(V_upper==TRUE))//量程非最高且低压
+//        {
+//            V_Range++;
+//            V_switch=TRUE;//量程切换标志
+//            
+//        } 
+//        else
+//        if((V_Range>0)&&(V_below==TRUE))//量程非最低且过压
+//        {
+//            V_Range--;
+//            V_switch=TRUE;//量程切换标志
+//           
+//        }
+//	if((f_switch==TRUE)||(V_switch==TRUE))//量程切换标志
+//	{
+//        range_over=1;//增加不换档标志，用于查看是否在稳定的量程测量的
+////        Range=0;
+//		Range_Control(Range,V_Range);//量程控制
+//        f_switch=FALSE;
+//        V_switch=FALSE;
+//	}
+////    V_Range_Control(0);
+//    else
+//        range_over=0;
+//      
+//}
 void Range_Changecomp(void)
 {
 	
@@ -1313,7 +1415,6 @@ void Range_Changecomp(void)
 	bool V_switch=FALSE;//量程切换标志
 	u8 i;
 	//量程自动换挡处?
-    
 	if(Range_value>RANGR_LIMIT_HIGH)//高于量程上限Ad_value
 	{
 		f_upper=TRUE;//量程过压标志
@@ -1335,7 +1436,7 @@ void Range_Changecomp(void)
 	}
 	f_switch=FALSE;//量程切换标志
 	//f_switch=TRUE;
-	if(Jk510_Set.jk510_SSet.Range_set==0 || GetSystemStatus()==SYS_STATUS_CLEAR)
+	if(Jk510_Set.jk510_SSet.Range_set==0)
 	{
 		if((Range<RANGE_MAX)&&(f_upper==TRUE))//量程非最高且低压
 		{
@@ -1347,7 +1448,7 @@ void Range_Changecomp(void)
 			count_ffit=0;
 		} 
         else
-		if((Range>=1)&&(f_below==TRUE))//量程非最低且过压
+		if((Range>0)&&(f_below==TRUE))//量程非最低且过压
 		{
 			Range--;
 			f_switch=TRUE;//量程切换标志
@@ -1356,9 +1457,116 @@ void Range_Changecomp(void)
 			ffit_data1=0;
 			count_ffit=0;
 		}
-        
+//        if(Range_Value_V>RANGE_LIMIT_VHIGH)//高于量程上限Ad_value
+//        {
+//            V_upper=TRUE;//量程过压标志
+//            V_below=FALSE;//量程欠压标志
+//            
+//        }
+//        else if(Range_Value_V<RANGE_LIMIT_VLOW)//低于量程下限
+//        {
+//            V_below=TRUE;//量程低压标志
+//            V_upper=FALSE;//量程欠压标志
+//        }
+//        else
+//        {
+//            V_upper=FALSE;//量程过压标志
+//            V_below=FALSE;//量程欠压标志
+//        }
+//        V_switch=FALSE;//量程切换标志
+//        //f_switch=TRUE;
+//        
+//        if((V_Range<RANGE_V_MAX)&&(V_upper==TRUE))//量程非最高且低压
+//        {
+//            V_Range++;
+//            V_switch=TRUE;//量程切换标志
+//            
+//        } 
+//        else
+//        if((V_Range>0)&&(V_below==TRUE))//量程非最低且过压
+//        {
+//            V_Range--;
+//            V_switch=TRUE;//量程切换标志
+//           
+//        }
     }
-	if(Range_Value_V>RANGE_LIMIT_VHIGH)//高于量程上限Ad_value
+	if((f_switch==TRUE)||(V_switch==TRUE))//量程切换标志
+	{
+        range_over=1;//增加不换档标志，用于查看是否在稳定的量程测量的
+//        Range=0;
+		Range_Control(Range,V_Range);//量程控制
+        f_switch=FALSE;
+        V_switch=FALSE;
+	}
+//    V_Range_Control(0);
+    else
+        range_over=0;
+        
+}
+//==========================================================
+//函数名称：Range_Changecomp
+//函数功能：电阻测试换挡
+//入口参数：无
+//出口参数：无
+//创建日期：2015.10.26 
+//修改日期：2015.10.29 13:35
+//备注说明：无
+//==========================================================
+void VRange_Changecomp(void)
+{
+	
+//	bool f_disp=FALSE;//显示标志
+	bool f_upper=FALSE;//量程过压标志
+	bool f_below=FALSE;//量程欠压标志
+	bool f_switch=FALSE;//量程切换标志
+    bool V_upper=FALSE;//量程过压标志
+	bool V_below=FALSE;//量程欠压标志
+	bool V_switch=FALSE;//量程切换标志
+	u8 i;
+//	//量程自动换挡处?
+//	if(Range_value>RANGR_LIMIT_HIGH)//高于量程上限Ad_value
+//	{
+//		f_upper=TRUE;//量程过压标志
+//		f_below=FALSE;//量程欠压标志
+//		for(i=0;i<FIT_INUM;i++)
+//			i_buff[i]=0;
+//			ffit_data1=0;
+//			count_ffit=0;
+//	}
+//	else if(Range_value<RANGR_LIMIT_LOW)//低于量程下限
+//	{
+//		f_below=TRUE;//量程低压标志
+//		f_upper=FALSE;//量程欠压标志
+//	}
+//	else
+//	{
+//		f_upper=FALSE;//量程过压标志
+//		f_below=FALSE;//量程欠压标志
+//	}
+//	f_switch=FALSE;//量程切换标志
+	//f_switch=TRUE;
+	if(Jk510_Set.jk510_SSet.Range_set==0)
+	{
+//		if((Range<RANGE_MAX)&&(f_upper==TRUE))//量程非最高且低压
+//		{
+//			Range++;
+//			f_switch=TRUE;//量程切换标志
+//			for(i=0;i<FIT_INUM;i++)
+//			i_buff[i]=0;
+//			ffit_data1=0;
+//			count_ffit=0;
+//		} 
+//        else
+//		if((Range>0)&&(f_below==TRUE))//量程非最低且过压
+//		{
+//			Range--;
+//			f_switch=TRUE;//量程切换标志
+//			for(i=0;i<FIT_INUM;i++)
+//			i_buff[i]=0;
+//			ffit_data1=0;
+//			count_ffit=0;
+//		}
+        if(Range_Value_V>RANGE_LIMIT_VHIGH)//高于量程上限Ad_value
         {
             V_upper=TRUE;//量程过压标志
             V_below=FALSE;//量程欠压标志
@@ -1390,6 +1598,7 @@ void Range_Changecomp(void)
             V_switch=TRUE;//量程切换标志
            
         }
+    }
 	if((f_switch==TRUE)||(V_switch==TRUE))//量程切换标志
 	{
         range_over=1;//增加不换档标志，用于查看是否在稳定的量程测量的
@@ -1401,7 +1610,7 @@ void Range_Changecomp(void)
 //    V_Range_Control(0);
     else
         range_over=0;
-      
+        
 }
 //==========================================================
 //函数名称：Get_FFT
@@ -1947,7 +2156,7 @@ void Disp_Open(void)
     Beep_Out(0);
     Beep_Off();
     LCD_DrawFullRect(SORTING_XDISP, SORTING_Y_DISP, 60, 22);
-    LCD_ShowFontCN_40_55(60+40*6,92,40,55, (uint8_t*)Out_Assic+14*40*55/8);
+//    LCD_ShowFontCN_40_55(60+40*6,92,40,55, (uint8_t*)Out_Assic+14*40*55/8);
     //WriteString_16 ( TESTVALUE_X, SORTING_Y_DISP+30, "RV_OPEN",0 ); 
     Colour.black=colour;
     Disp_Range(Jk516save.Set_Data.Range_Set,Range);

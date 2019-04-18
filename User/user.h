@@ -118,6 +118,7 @@ void Disp_Setup_Menu(u8 index);
 void System_Setup(void);
 void Read_Ad(void);
 void Range_Changecomp(void);
+void VRange_Changecomp(void);
 void Get_FFT(void);
 void Test_Debug(void);
 void _4094_data(void);

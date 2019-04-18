@@ -168,7 +168,7 @@
           <Type>0</Type>
           <LineNumber>801</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134253690</Address>
+          <Address>134253594</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -184,7 +184,7 @@
           <Type>0</Type>
           <LineNumber>974</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134254532</Address>
+          <Address>134254436</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -197,6 +197,22 @@
         </Bp>
         <Bp>
           <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>979</LineNumber>
+          <EnabledFlag>0</EnabledFlag>
+          <Address>134254492</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>F:\2520S\Project\User\test.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Template\../../User/test.c\979</Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
           <Type>0</Type>
           <LineNumber>973</LineNumber>
           <EnabledFlag>0</EnabledFlag>
@@ -442,6 +458,11 @@
           <count>45</count>
           <WinNumber>1</WinNumber>
           <ItemText>g_tModS.RxBuf</ItemText>
+        </Ww>
+        <Ww>
+          <count>46</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>scan_I,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
