@@ -1726,7 +1726,7 @@ I (..\..\HARDWARE\uart.h)(0x5B8AA72B)
 I (..\..\User\flash.h)(0x5AE2C7E5)
 I (..\..\User\spi.h)(0x5AE2C86D)
 I (..\..\User\bsp_exti.h)(0x5B927181)
-F (..\..\User\user.c)(0x5CB7EBF6)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\Libraries\CMSIS\Include -I ..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I ..\..\User -I ..\..\HARDWARE -I ..\..\User\lcd -I ..\..\FATFS -I ..\..\Libraries\STM32_USB_HOST_Library\Class\MSC\inc -I ..\..\Libraries\STM32_USB_HOST_Library\Core\inc -I ..\..\Libraries\STM32_USB_OTG_Driver\inc -I ..\..\User\flash -I ..\..\HARDWARE\font -I ..\..\User\APP -I ..\..\User\RTC-I.\RTE\_________-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.12.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F429xx -DSTM32F429_439xx -DUSE_STDPERIPH_DRIVER -DUSE_USB_OTG_HS -DUSE_EMBEDDED_PHY --C99-o ..\..\output\user.o --omf_browse ..\..\output\user.crf --depend ..\..\output\user.d)
+F (..\..\User\user.c)(0x5CC7FA32)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\Libraries\CMSIS\Include -I ..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I ..\..\User -I ..\..\HARDWARE -I ..\..\User\lcd -I ..\..\FATFS -I ..\..\Libraries\STM32_USB_HOST_Library\Class\MSC\inc -I ..\..\Libraries\STM32_USB_HOST_Library\Core\inc -I ..\..\Libraries\STM32_USB_OTG_Driver\inc -I ..\..\User\flash -I ..\..\HARDWARE\font -I ..\..\User\APP -I ..\..\User\RTC-I.\RTE\_________-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.12.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F429xx -DSTM32F429_439xx -DUSE_STDPERIPH_DRIVER -DUSE_USB_OTG_HS -DUSE_EMBEDDED_PHY --C99-o ..\..\output\user.o --omf_browse ..\..\output\user.crf --depend ..\..\output\user.d)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 I (D:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
 I (D:\Keil_v5\ARM\ARMCC\include\math.h)(0x599ECD2E)
@@ -1900,7 +1900,7 @@ I (..\..\Libraries\STM32_USB_HOST_Library\Core\inc\usbh_ioreq.h)(0x57737D4E)
 I (..\..\Libraries\STM32_USB_HOST_Library\Core\inc\usbh_hcs.h)(0x57737D4E)
 I (..\..\User\./APP/usbh_usr.h)(0x57737D4E)
 I (..\..\User\./RTC/bsp_rtc.h)(0x5B913759)
-I (..\..\User\open.h)(0x5C95EDDF)
+I (..\..\User\open.h)(0x5CC7FA0B)
 F (..\..\±Ø¶ÁËµÃ÷.txt)(0x57737D4C)()
 F (..\..\HARDWARE\4094.C)(0x5B29F720)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\Libraries\CMSIS\Include -I ..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I ..\..\User -I ..\..\HARDWARE -I ..\..\User\lcd -I ..\..\FATFS -I ..\..\Libraries\STM32_USB_HOST_Library\Class\MSC\inc -I ..\..\Libraries\STM32_USB_HOST_Library\Core\inc -I ..\..\Libraries\STM32_USB_OTG_Driver\inc -I ..\..\User\flash -I ..\..\HARDWARE\font -I ..\..\User\APP -I ..\..\User\RTC-I.\RTE\_________-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.12.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F429xx -DSTM32F429_439xx -DUSE_STDPERIPH_DRIVER -DUSE_USB_OTG_HS -DUSE_EMBEDDED_PHY --C99-o ..\..\output\4094.o --omf_browse ..\..\output\4094.crf --depend ..\..\output\4094.d)
 I (..\..\User\pbdata.h)(0x5C9AD075)
