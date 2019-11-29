@@ -168,7 +168,7 @@
           <Type>0</Type>
           <LineNumber>801</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134253594</Address>
+          <Address>134253592</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -463,6 +463,11 @@
           <count>46</count>
           <WinNumber>1</WinNumber>
           <ItemText>scan_I,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>47</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>reg_value</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

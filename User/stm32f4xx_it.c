@@ -690,7 +690,7 @@ static void MODS_03H(void)
     uint16_t reg;
 	uint16_t num;
 	uint16_t i;
-	uint8_t reg_value[150];
+	uint8_t reg_value[300];
 
     
     g_tModS.RspCode = RSP_OK;
@@ -702,7 +702,7 @@ static void MODS_03H(void)
 	}
 
 	reg = BEBufToUint16(&g_tModS.RxBuf[2]); 				/* ???? */
-	num = BEBufToUint16(&g_tModS.RxBuf[4])*2;					/* ????? */
+	num = BEBufToUint16(&g_tModS.RxBuf[4])*6;					/* ????? */
 	if (num > sizeof(reg_value) / 2)
 	{
 		g_tModS.RspCode = RSP_ERR_VALUE;					/* ?????? */
