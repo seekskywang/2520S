@@ -1128,12 +1128,14 @@ void Test_Process(void)
 												Colour.Fword= LCD_COLOR_RED;
 												Beep_Out(1);
 												Led_Fail_On();
+												Plc_Comp(i,1);
 											}
 											else
 											{
 												Colour.Fword=LCD_COLOR_GREEN;
 												Beep_Out(0);
 												Led_Pass_On();
+												Plc_Comp(i,0);
 											}
 										
 										}
@@ -1174,6 +1176,7 @@ void Test_Process(void)
 												Colour.Fword= LCD_COLOR_RED;
 												Led_Fail_On();
 												Beep_Out(1);
+												Plc_Comp(i,1);
 											}
 											else
 											{

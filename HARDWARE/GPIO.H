@@ -46,5 +46,5 @@ void Close_Compled(void);
 
 void Relay_Select(u8 channel);
 void sm_RYsel(u8 date);
-
+void Plc_Comp(u8 ch,u8 res);
 #endif 
