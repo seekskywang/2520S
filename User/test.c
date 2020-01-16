@@ -21,6 +21,7 @@ extern struct MODS_T g_tModS;
 FRESULT result;
 FATFS fs;
 FIL file;
+u8 compch;
 //const u8 RANGE_UNIT[11]=
 //{
 //	4,
@@ -764,6 +765,7 @@ void Test_Process(void)
 					{
 						if(Jk510_Set.channel_sellect[i]==1)//通道打开
 						{
+							compch = i;
 							Relay_Select(i);
 							if(Jk510_Set.jk510_SSet.speed == 0)
 							{
@@ -1128,7 +1130,7 @@ void Test_Process(void)
 												Colour.Fword= LCD_COLOR_RED;
 												Beep_Out(1);
 												Led_Fail_On();
-												Plc_Comp(i,1);
+												
 											}
 											else
 											{
@@ -1214,6 +1216,7 @@ void Test_Process(void)
 											Colour.Fword= LCD_COLOR_RED;
 											WriteString_16(416, 26+i*20, (u8 *)"V FAIL",  0);
 											Led_Fail_On();
+											Plc_Comp(i,1);
 											Beep_Out(1);
 										}
 										else
@@ -1221,6 +1224,7 @@ void Test_Process(void)
 											Colour.Fword=LCD_COLOR_GREEN;
 											WriteString_16(416, 26+i*20, (u8 *)"V PASS",  0);
 											Led_Pass_On();
+											Plc_Comp(i,0);
 											Beep_Out(0);
 										}
 									
@@ -1239,6 +1243,7 @@ void Test_Process(void)
 											Colour.Fword= LCD_COLOR_RED;
 											WriteString_16(240-10, 26+i*20, (u8 *)"R FAIL",  0);
 											Led_Fail_On();
+											Plc_Comp(i,1);
 											Beep_Out(1);
 										}
 										else
@@ -1764,6 +1769,7 @@ void Test_Process(void)
 										{
 											Colour.Fword= LCD_COLOR_RED;
 											WriteString_16(416, 26+chcount*20, (u8 *)"V FAIL",  0);
+											Plc_Comp(i,1);
 											Led_Fail_On();
 											Beep_Out(1);
 										}
@@ -1771,6 +1777,7 @@ void Test_Process(void)
 										{
 											Colour.Fword=LCD_COLOR_GREEN;
 											WriteString_16(416, 26+chcount*20, (u8 *)"V PASS",  0);
+											Plc_Comp(i,0);
 											Led_Pass_On();
 											Beep_Out(0);
 										}
@@ -1789,6 +1796,7 @@ void Test_Process(void)
 										{
 											Colour.Fword= LCD_COLOR_RED;
 											WriteString_16(240-10, 26+chcount*20, (u8 *)"R FAIL",  0);
+											Plc_Comp(i,1);
 											Led_Fail_On();
 											Beep_Out(1);
 										}
@@ -1825,6 +1833,7 @@ void Test_Process(void)
 						{
 							if(Jk510_Set.channel_sellect[i]==1)//通道打开
 							{
+								compch = i;
 								Relay_Select(i);
 								if(Jk510_Set.jk510_SSet.speed == 0)
 								{
@@ -2280,12 +2289,14 @@ void Test_Process(void)
 												Colour.Fword= LCD_COLOR_RED;
 												WriteString_16(416, 26+i*20, (u8 *)"V FAIL",  0);
 												Led_Fail_On();
+												Plc_Comp(i,1);
 												Beep_Out(1);
 											}
 											else
 											{
 												Colour.Fword=LCD_COLOR_GREEN;
 												WriteString_16(416, 26+i*20, (u8 *)"V PASS",  0);
+												Plc_Comp(i,0);
 												Led_Pass_On();
 												Beep_Out(0);
 											}
@@ -2304,6 +2315,7 @@ void Test_Process(void)
 											{
 												Colour.Fword= LCD_COLOR_RED;
 												WriteString_16(240-10, 26+i*20, (u8 *)"R FAIL",  0);
+												Plc_Comp(i,1);
 												Led_Fail_On();
 												Beep_Out(1);
 											}

@@ -119,6 +119,10 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>PWSTATINFO</Key>
           <Name>200,50,700</Name>
         </SetRegEntry>
@@ -158,72 +162,7 @@
           <Name>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_1024 -FS08000000 -FL0100000 -FP0($$Device:STM32F429IG$CMSIS\Flash\STM32F4xx_1024.FLM))</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>801</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>134253592</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>F:\2520S\Project\User\test.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Template\../../User/test.c\801</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>974</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>134254436</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>F:\2520S\Project\User\test.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Template\../../User/test.c\974</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>979</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>134254492</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>F:\2520S\Project\User\test.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Template\../../User/test.c\979</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>973</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\User\test.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-      </Breakpoint>
+      <Breakpoint/>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -465,7 +404,24 @@
           <WinNumber>1</WinNumber>
           <ItemText>reg_value</ItemText>
         </Ww>
+        <Ww>
+          <count>48</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>Test_Value,0x0A</ItemText>
+        </Ww>
       </WatchWindow1>
+      <WatchWindow2>
+        <Ww>
+          <count>0</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>Sort_num1,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>Sort_num,0x0A</ItemText>
+        </Ww>
+      </WatchWindow2>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
@@ -483,7 +439,7 @@
         <aLwin>1</aLwin>
         <aCover>0</aCover>
         <aSer1>0</aSer1>
-        <aSer2>0</aSer2>
+        <aSer2>1</aSer2>
         <aPa>0</aPa>
         <viewmode>1</viewmode>
         <vrSel>0</vrSel>
@@ -1111,7 +1067,7 @@
       <GroupNumber>4</GroupNumber>
       <FileNumber>47</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\User\test.c</PathWithFileName>
@@ -1175,7 +1131,7 @@
       <GroupNumber>6</GroupNumber>
       <FileNumber>51</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\HARDWARE\GPIO.C</PathWithFileName>

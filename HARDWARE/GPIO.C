@@ -257,12 +257,12 @@ void GPIO_Configuration(void)
     GPIO_InitStructure.GPIO_PuPd=GPIO_PuPd_UP;
 	GPIO_Init(GPIOB,&GPIO_InitStructure); 
 	
-	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_13;
+	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_5;
     GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode=GPIO_Mode_OUT;
     GPIO_InitStructure.GPIO_OType=GPIO_OType_PP;  
     GPIO_InitStructure.GPIO_PuPd=GPIO_PuPd_UP;
-	GPIO_Init(GPIOA,&GPIO_InitStructure); 
+	GPIO_Init(GPIOD,&GPIO_InitStructure); 
 	
 	
     Led_GPIO_Configuration();//LED
@@ -313,9 +313,9 @@ void CH4COMP(u8 status)
 {
 	if(status == 1)
 	{
-		GPIO_SetBits(GPIOA,GPIO_Pin_13);
+		GPIO_SetBits(GPIOD,GPIO_Pin_5);
 	}else if(status == 0){
-		GPIO_ResetBits(GPIOA,GPIO_Pin_13);
+		GPIO_ResetBits(GPIOD,GPIO_Pin_5);
 	}
 }
 

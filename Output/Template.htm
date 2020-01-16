@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\..\Output\Template.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\..\Output\Template.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Jan 09 15:31:12 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jan 10 13:59:45 2020
 <BR><P>
 <H3>Maximum Stack Usage =       1200 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1231,7 +1231,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[f9]"></a>Disp_Testvalue</STRONG> (Thumb, 638 bytes, Stack size 64 bytes, user.o(i.Disp_Testvalue))
-<BR><BR>[Stack]<UL><LI>Max Depth = 408<LI>Call Chain = Disp_Testvalue &rArr; R_Comp &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
+<BR><BR>[Stack]<UL><LI>Max Depth = 416<LI>Call Chain = Disp_Testvalue &rArr; R_Comp &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteString_Big
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteString_16
@@ -2333,8 +2333,8 @@ Global Symbols
 <LI><a href="#[159]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_TimeAndDate_Set
 </UL>
 
-<P><STRONG><a name="[fb]"></a>R_Comp</STRONG> (Thumb, 348 bytes, Stack size 40 bytes, user.o(i.R_Comp))
-<BR><BR>[Stack]<UL><LI>Max Depth = 344<LI>Call Chain = R_Comp &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
+<P><STRONG><a name="[fb]"></a>R_Comp</STRONG> (Thumb, 400 bytes, Stack size 48 bytes, user.o(i.R_Comp))
+<BR><BR>[Stack]<UL><LI>Max Depth = 352<LI>Call Chain = R_Comp &rArr; __hardfp_pow &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
@@ -2808,7 +2808,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test_Process
 </UL>
 
-<P><STRONG><a name="[1a9]"></a>Test_Process</STRONG> (Thumb, 11220 bytes, Stack size 248 bytes, test.o(i.Test_Process))
+<P><STRONG><a name="[1a9]"></a>Test_Process</STRONG> (Thumb, 11344 bytes, Stack size 248 bytes, test.o(i.Test_Process))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1200<LI>Call Chain = Test_Process &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; USBH_MSC_HandleBOTXfer &rArr; USBH_BulkSendData &rArr; HCD_SubmitRequest &rArr; USB_OTG_HC_StartXfer &rArr; USB_OTG_WritePacket
 </UL>
 <BR>[Calls]<UL><LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EXTI_ClearITPendingBit
@@ -3673,7 +3673,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test_Process
 </UL>
 
-<P><STRONG><a name="[fa]"></a>V_Comp</STRONG> (Thumb, 126 bytes, Stack size 8 bytes, user.o(i.V_Comp))
+<P><STRONG><a name="[fa]"></a>V_Comp</STRONG> (Thumb, 138 bytes, Stack size 8 bytes, user.o(i.V_Comp))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = V_Comp
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test_Process

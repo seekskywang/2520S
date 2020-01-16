@@ -5648,7 +5648,7 @@ Sort_TypeDef Time_Set_Cov(Sort_TypeDef *Time)
         else
         {
         Time->Num=value;
-		Time->Dot=3;
+		Time->Dot=4;
 		Time->Unit=0;
         
         }
@@ -5815,8 +5815,8 @@ uint8_t R_Comp(void)
     float set_lowvalue;
     u8 flag;
     testvalue=Test_Value.res*pow(10,3*(Test_Value.uint))/pow(10,Test_Value.dot);
-    set_highvalue=Jk510_Set.Res_comp.Res_Hi[0].Num*pow(10,3*(Jk510_Set.Res_comp.Res_Hi[0].Unit))/pow(10,Jk510_Set.Res_comp.Res_Hi[0].Dot);
-    set_lowvalue=Jk510_Set.Res_comp.Res_Lo[0].Num*pow(10,3*(Jk510_Set.Res_comp.Res_Lo[0].Unit))/pow(10,Jk510_Set.Res_comp.Res_Lo[0].Dot);
+    set_highvalue=Jk510_Set.Res_comp.Res_Hi[compch].Num*pow(10,3*(Jk510_Set.Res_comp.Res_Hi[compch].Unit))/pow(10,Jk510_Set.Res_comp.Res_Hi[compch].Dot);
+    set_lowvalue=Jk510_Set.Res_comp.Res_Lo[compch].Num*pow(10,3*(Jk510_Set.Res_comp.Res_Lo[compch].Unit))/pow(10,Jk510_Set.Res_comp.Res_Lo[compch].Dot);
     if(testvalue>set_highvalue)//大于上限
         flag=1;
     else if(testvalue<set_lowvalue)//小于下限
@@ -5848,20 +5848,20 @@ uint8_t V_Comp(void)
         dot=10;
     testvalue=Test_Value_V.res*dot;
     
-    if(Jk510_Set.V_comp.V_Hi[0].Dot==3)
-        set_highvalue=Jk510_Set.V_comp.V_Hi[0].Num*10;//Jk516save.Set_Data.V_high.Num*10;
-    else if(Jk510_Set.V_comp.V_Hi[0].Dot==5)
-        set_highvalue=Jk510_Set.V_comp.V_Hi[0].Num/10;//Jk516save.Set_Data.V_high.Num/10;
+    if(Jk510_Set.V_comp.V_Hi[compch].Dot==3)
+        set_highvalue=Jk510_Set.V_comp.V_Hi[compch].Num*10;//Jk516save.Set_Data.V_high.Num*10;
+    else if(Jk510_Set.V_comp.V_Hi[compch].Dot==5)
+        set_highvalue=Jk510_Set.V_comp.V_Hi[compch].Num/10;//Jk516save.Set_Data.V_high.Num/10;
     else
-        set_highvalue=Jk510_Set.V_comp.V_Hi[0].Num;//Jk516save.Set_Data.V_high.Num;
+        set_highvalue=Jk510_Set.V_comp.V_Hi[compch].Num;//Jk516save.Set_Data.V_high.Num;
         
     
-    if(Jk510_Set.V_comp.V_Lo[0].Dot==3)
-        set_lowvalue=Jk510_Set.V_comp.V_Lo[0].Num*10;//Jk516save.Set_Data.V_low.Num*10;
-    else if(Jk510_Set.V_comp.V_Lo[0].Dot==5)
-        set_lowvalue=Jk510_Set.V_comp.V_Lo[0].Num/10;//Jk516save.Set_Data.V_low.Num/10;
+    if(Jk510_Set.V_comp.V_Lo[compch].Dot==3)
+        set_lowvalue=Jk510_Set.V_comp.V_Lo[compch].Num*10;//Jk516save.Set_Data.V_low.Num*10;
+    else if(Jk510_Set.V_comp.V_Lo[compch].Dot==5)
+        set_lowvalue=Jk510_Set.V_comp.V_Lo[compch].Num/10;//Jk516save.Set_Data.V_low.Num/10;
     else
-        set_lowvalue=Jk510_Set.V_comp.V_Lo[0].Num;//;Jk516save.Set_Data.V_low.Num;
+        set_lowvalue=Jk510_Set.V_comp.V_Lo[compch].Num;//;Jk516save.Set_Data.V_low.Num;
     
     if(testvalue>set_highvalue)//大于上限
         flag=1;
