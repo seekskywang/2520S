@@ -4654,6 +4654,7 @@ void Use_SysSetProcess(void)
 	{
 		Jk510_Set.Sys_Setvalue.plc = 0;
 	}
+	Close_Compled();
  	while(GetSystemStatus()==SYS_STATUS_SYSSET)
 	{
 	  	
@@ -5146,7 +5147,7 @@ void Sys_Process(void)
 	vu8 key;
 	vu8 Disp_flag=1;
     LCD_Clear(LCD_COLOR_TEST_BACK);
-
+	Close_Compled();
 	while(GetSystemStatus()==SYS_STATUS_SYS)
 	{
 		if(Disp_flag==1)

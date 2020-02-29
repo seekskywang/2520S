@@ -119,6 +119,10 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>PWSTATINFO</Key>
           <Name>200,50,700</Name>
         </SetRegEntry>
@@ -405,6 +409,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>Test_Value,0x0A</ItemText>
         </Ww>
+        <Ww>
+          <count>49</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>test_start</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
@@ -441,6 +450,11 @@
           <count>6</count>
           <WinNumber>2</WinNumber>
           <ItemText>Extrigflag</ItemText>
+        </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>test_start</ItemText>
         </Ww>
       </WatchWindow2>
       <MemoryWindow1>

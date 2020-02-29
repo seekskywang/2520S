@@ -428,6 +428,7 @@ void Setup_Process(void)
     LCD_Clear(LCD_COLOR_TEST_BACK);
     Disp_Test_Set_Item();
 	FLAG1._595A = 0x0000;
+	Close_Compled();
  	while(GetSystemStatus()==SYS_STATUS_SETUP)
 	{
 	    
@@ -728,7 +729,7 @@ void Setup_Process(void)
 //==========================================================
 void Test_Process(void)
 {   
-	static u8 chcount;
+	static u8 chcount,extdelay;
 	static u8 Extrigflag = 0;
 	static u8 Extrstflag = 0;
 	vu8 key;
@@ -798,6 +799,7 @@ void Test_Process(void)
 		modenume=1;
 	chcount = 0;
 	FLAG1._595A = 0x0000;
+	Close_Compled();
 	while(GetSystemStatus()==SYS_STATUS_TEST)
 	{
 		LED595SendData();
@@ -822,16 +824,19 @@ void Test_Process(void)
             
         }
 		//Jk510_Set.jk510_SSet.trig=0;
-		if(Jk510_Set.jk510_SSet.trig==2)
+		if(Jk510_Set.jk510_SSet.trig==2 && extdelay == 0)
 		{
 			if(Extrigflag == 0)
 			{
 				test_start = 1;
+				extdelay = 10;
 			}
 			if(Extrstflag == 0)
 			{
 				Test_Process();//测试处理
 			}
+		}else{
+			extdelay --;
 		}
 		 if(Jk510_Set.jk510_SSet.trig==0)
             test_start=1;
@@ -1335,7 +1340,7 @@ void Test_Process(void)
 										}
 										else
 										{
-											if(Jk510_Set.jk510_SSet.V_Comp==0 || test_Vsorting == 0)
+											if(Jk510_Set.jk510_SSet.V_Comp==0 || (test_Vsorting != 1 && test_Vsorting != 2))
 											{
 												Plc_Comp(i,0);
 											}
@@ -1365,6 +1370,7 @@ void Test_Process(void)
 					{
 						if(Jk510_Set.channel_sellect[chcount]==1)//通道打开
 						{
+							compch = chcount;
 							Relay_Select(chcount);
 							if(Jk510_Set.jk510_SSet.speed == 0)
 							{
@@ -1904,9 +1910,9 @@ void Test_Process(void)
 										}
 										else
 										{
-											if(Jk510_Set.jk510_SSet.V_Comp==0 || test_Vsorting == 0)
+											if(Jk510_Set.jk510_SSet.V_Comp==0 || (test_Vsorting != 1 && test_Vsorting != 2))
 											{
-												Plc_Comp(i,0);
+												Plc_Comp(chcount,0);
 											}
 											Colour.Fword=LCD_COLOR_GREEN;
 											WriteString_16(240-10, 26+chcount*20, (u8 *)"R PASS",  0);
@@ -1921,8 +1927,9 @@ void Test_Process(void)
 								
 									
 								}
-								
-							}	
+								test_start = 0;
+							}
+							
 						}
 					if(chcount > 8)
 					{
@@ -1930,6 +1937,7 @@ void Test_Process(void)
 					}else{
 						chcount++;
 					}
+					
 				}else{
 					for(i=0;i<modenume;i++)
 					{
@@ -2435,7 +2443,7 @@ void Test_Process(void)
 											{
 												Colour.Fword=LCD_COLOR_GREEN;
 												WriteString_16(240-10, 26+i*20, (u8 *)"R PASS",  0);
-												if(Jk510_Set.jk510_SSet.V_Comp==0 || test_Vsorting == 0)
+												if(Jk510_Set.jk510_SSet.V_Comp==0 || (test_Vsorting != 1 && test_Vsorting != 2))
 												{
 													Plc_Comp(i,0);
 												}
@@ -2645,8 +2653,10 @@ void Test_Process(void)
 						Test_Process();//测试处理
                     break;
                     case Key_TRIG:
-                        test_start=1;
-                        
+						if(Jk510_Set.jk510_SSet.trig==1)
+						{
+							test_start=1;
+                        }
                     break;
                     default:
                         SetSystemStatus(SYS_STATUS_TEST);
