@@ -89,3 +89,6 @@
 ..\..\output\test.o: ..\..\User\./APP/usbh_usr.h
 ..\..\output\test.o: ..\..\User\./RTC/bsp_rtc.h
 ..\..\output\test.o: ..\..\User\open.h
+..\..\output\test.o: ..\..\HARDWARE\74LS595.h
+..\..\output\test.o: ..\..\User\flash_if.h
+..\..\output\test.o: ..\..\User\flash_if.h

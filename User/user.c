@@ -378,7 +378,7 @@ const uint8_t BiasButton_Tip[][7+1]=  //频率选择时候的下面的提示符号
 const uint8_t Sys_Sys[][20+1]=
 {
 	{"仪器型号  jh8210C"},
-	{"软件版本  Ver:1.1"},
+	{"软件版本  Ver:1.2"},
 	{"硬件版本  Ver:1.1"},
 	{"仪器编号"},
 //	{"账号    "},
@@ -389,7 +389,7 @@ const uint8_t Sys_Sys[][20+1]=
 const uint8_t Sys_Sys_E[][20+1]=
 {
 	{"INST MODEL  jh8210C"},
-	{"SOFT VER   Ver:1.1"},
+	{"SOFT VER   Ver:1.2"},
 	{"HARD VER   Ver:1.1"},
 	{"SERIALNO"},
 //	{"账号    "},
@@ -2500,7 +2500,40 @@ void Disp_Button_value1(uint32_t value)
         WriteString_16(84+80+80+80+80, 271-40, "更多",  0);
 		WriteString_16(84+80+80+80+80, 271-20, " 2/2",  0);
     
-    }
+    }else if(value == 2){
+		Colour.Fword=White;
+		Colour.black=LCD_COLOR_TEST_BUTON;
+        if(Jk510_Set.Sys_Setvalue.lanage)
+        {
+            WriteString_16(84, 271-40, "MEAS",  0);
+            WriteString_16(84, 271-20, "DISP",  0);
+            WriteString_16(84+80, 271-40, "MEAS",  0);
+            WriteString_16(84+80, 271-20, "SETUP",  0);
+            WriteString_16(84+80+80, 271-40, " SYS",  0);
+            WriteString_16(84+80+80, 271-20, "SETUP",  0);
+            WriteString_16(84+80+80+80, 271-40, "SYS",  0);
+            WriteString_16(84+80+80+80, 271-20, "INFO",  0);
+			WriteString_16(84+80+80+80+80, 271-40, "SYS",  0);
+            WriteString_16(84+80+80+80+80, 271-20, "UPDATE",  0);
+        
+        
+        }
+        else
+        {
+            WriteString_16(84, 271-40, "测量",  0);
+            WriteString_16(84, 271-20, "显示",  0);
+            WriteString_16(84+80, 271-40, "测量",  0);
+            WriteString_16(84+80, 271-20, "设置",  0);
+            WriteString_16(84+80+80, 271-40, "系统",  0);
+            WriteString_16(84+80+80, 271-20, "设置",  0);
+            WriteString_16(84+80+80+80, 271-40, "系统",  0);
+            WriteString_16(84+80+80+80, 271-20, "信息",  0);
+			WriteString_16(84+80+80+80+80, 271-40, "固件",  0);
+			WriteString_16(84+80+80+80+80, 271-20, "升级",  0);
+//		WriteString_16(84+80+80+80+80, 271-40, "更多",  0);
+//		WriteString_16(84+80+80+80+80, 271-20, " 1/2",  0);
+        }
+	}
 
 }
 void Disp_Button_value_sm(uint32_t value)
@@ -2643,7 +2676,7 @@ void Disp_Button_TestSet(uint32_t value)
 void Disp_Button_SysSet(void)
 {
 
-		Disp_Button_value1(0);
+		Disp_Button_value1(2);
 
 
 }
@@ -4875,7 +4908,8 @@ void Use_SysSetProcess(void)
 					switch(keynum)
 					{
 						case 0:
-							break;//恢复系统复位
+							JumpBoot(55);
+							break;
 						case 2:
 							Jk510_Set.Sys_Setvalue.buard=4;
 							
@@ -5103,7 +5137,7 @@ void Disp_Sys(void)
 //		WriteString_16(LIST2,FIRSTLINE+SPACE1*(i-sizeof(Sys_Setitem)/(sizeof(Sys_Setitem[0]))/2), Sys_Setitem[i],  0);
 //	}
 //	Disp_SysLine();
-	Disp_Button_SysSet();
+	Disp_Button_value1(0);
 }
 
 void Sys_Process(void)

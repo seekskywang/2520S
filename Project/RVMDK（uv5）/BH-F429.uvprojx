@@ -80,9 +80,9 @@
             <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
-            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name></UserProg1Name>
+            <UserProg1Name>D:\Keil_v5\ARM\ARMCC\bin\fromelf.exe --bin -o ..\..\Output\update.bin ..\..\Output\Template.axf</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
@@ -782,6 +782,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp_exti.c</FilePath>
             </File>
+            <File>
+              <FileName>74LS595.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\HARDWARE\74LS595.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -816,6 +821,11 @@
               <FileName>usbh_usr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\APP\usbh_usr.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash_if.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\flash_if.c</FilePath>
             </File>
           </Files>
         </Group>

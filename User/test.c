@@ -6,8 +6,8 @@
 #include "./RTC/bsp_rtc.h"
 #include "bsp_exti.h"
 #include "open.h"
-
-
+#include "74LS595.h"
+#include "flash_if.h"
 
 //反馈切换
 // 输入0 1 2 3  U16_4094
@@ -22,6 +22,31 @@ FRESULT result;
 FATFS fs;
 FIL file;
 u8 compch;
+
+extern union 
+{
+   unsigned int _595A;
+   struct 
+   {
+       unsigned char  O0:1;
+       unsigned char  P1:1;
+       unsigned char  F1:1;
+       unsigned char  P2:1;
+       unsigned char  F2:1;
+       unsigned char  P3:1;
+       unsigned char  F3:1;
+       unsigned char  P4:1;
+	   unsigned char  O1:1;
+       unsigned char  F4:1;
+       unsigned char  P5:1;
+       unsigned char  F5:1;
+       unsigned char  P6:1;
+       unsigned char  F6:1;
+       unsigned char  P7:1;
+       unsigned char  F7:1;
+   }BIT_FLAG;
+}FLAG1;
+
 //const u8 RANGE_UNIT[11]=
 //{
 //	4,
@@ -64,6 +89,53 @@ u8 compch;
 //  
 //  
 //}  
+
+void JumpBoot(u8 flag)
+{
+  	void (*pUserApp)(void);
+  uint32_t JumpAddress;
+	if(flag==55)
+  {		
+	__asm("CPSID  I");
+        
+		JumpAddress = *(volatile uint32_t*) (USER_FLASH_FIRST_PAGE_ADDRESS+4);
+		pUserApp = (void (*)(void)) JumpAddress;
+		TIM_Cmd(BASIC_TIM, DISABLE);	
+		TIM_DeInit(TIM2);
+		TIM_Cmd(TIM2,DISABLE);
+		TIM_DeInit(BASIC_TIM);
+		TIM_ITConfig(BASIC_TIM,TIM_IT_Update,DISABLE);
+		TIM_Cmd(BASIC_TIM, DISABLE);	
+		USART_DeInit(DEBUG_USART);
+		USART_ITConfig(DEBUG_USART, USART_IT_RXNE, DISABLE);		
+		USART_Cmd(DEBUG_USART,DISABLE);
+		RCC_DeInit();
+		RCC_RTCCLKCmd(DISABLE);
+		EXTI_DeInit();
+		SysTick->CTRL = 0;
+		RTC_DeInit();
+		RTC_ITConfig(RTC_IT_WUT,DISABLE);//关闭WAKE UP 定时器中断
+		RTC_WakeUpCmd( DISABLE);//关闭WAKE UP 定时器　
+		Disable_Extiint();
+		USBH_DeInit(&USB_OTG_Core,&USB_Host);
+		__disable_irq();
+		NVIC_DisableIRQ(OTG_FS_IRQn);
+		NVIC_DisableIRQ(OTG_FS_WKUP_IRQn);
+		NVIC_DisableIRQ(OTG_HS_IRQn);
+		NVIC_DisableIRQ(OTG_HS_WKUP_IRQn);
+		__ASM volatile ("cpsid i");
+		/* Initialize user application's Stack Pointer */
+		__set_PSP(*(volatile uint32_t*) USER_FLASH_FIRST_PAGE_ADDRESS);
+		__set_CONTROL(0);
+		__set_MSP(*(volatile uint32_t*) USER_FLASH_FIRST_PAGE_ADDRESS);
+		
+        
+		
+//		NVIC_SystemReset();
+		pUserApp();
+	}
+}
+
 void Power_Process(void)
 {
 	u16 i;
@@ -135,6 +207,7 @@ void Power_Process(void)
             &USBH_MSC_cb,
             &USR_cb);
      USBH_Process(&USB_OTG_Core, &USB_Host);
+	 In_595();
 	while(GetSystemStatus()==SYS_STATUS_POWER)
 	{
 		i++;
@@ -354,6 +427,7 @@ void Setup_Process(void)
 	keynum=0;
     LCD_Clear(LCD_COLOR_TEST_BACK);
     Disp_Test_Set_Item();
+	FLAG1._595A = 0x0000;
  	while(GetSystemStatus()==SYS_STATUS_SETUP)
 	{
 	    
@@ -656,6 +730,7 @@ void Test_Process(void)
 {   
 	static u8 chcount;
 	static u8 Extrigflag = 0;
+	static u8 Extrstflag = 0;
 	vu8 key;
     vu16 USB_Count=0;
     UINT fnum;
@@ -721,12 +796,15 @@ void Test_Process(void)
 		modenume=10;
 	else
 		modenume=1;
+	chcount = 0;
+	FLAG1._595A = 0x0000;
 	while(GetSystemStatus()==SYS_STATUS_TEST)
 	{
-       USB_Count++;
+		LED595SendData();
+        USB_Count++;
         
         Extrigflag = Read_ExtTrig();
-		
+		Extrstflag = Read_ExtReset();
 		 if(Disp_RTCflag)
         {
             Disp_RTCflag=0;
@@ -744,11 +822,15 @@ void Test_Process(void)
             
         }
 		//Jk510_Set.jk510_SSet.trig=0;
-		if(Jk516save.Set_Data.trip==2)
+		if(Jk510_Set.jk510_SSet.trig==2)
 		{
 			if(Extrigflag == 0)
 			{
 				test_start = 1;
+			}
+			if(Extrstflag == 0)
+			{
+				Test_Process();//测试处理
 			}
 		}
 		 if(Jk510_Set.jk510_SSet.trig==0)
@@ -975,6 +1057,8 @@ void Test_Process(void)
 					   }
 					   if(Jk510_Set.jk510_SSet.mode)//多路显示
 					   {
+						   Plc_Comp(i,2);
+						   Colour.Fword = White;
 						   WriteString_16(110, 26+i*20, "--------",  0);//电阻显示
 						   
 						   WriteString_16(296+30, 26+i*20,"-------- ",  0);//电压显示
@@ -1044,8 +1128,10 @@ void Test_Process(void)
 							   open_flag=1;
 								if(Jk510_Set.jk510_SSet.mode)//多路显示
 							   {
+								   Plc_Comp(i,2);
+								   Colour.Fword = White;
 								   WriteString_16(110, 26+i*20, "--------",  0);//电阻显示
-								   
+							   
 								   WriteString_16(296+30, 26+i*20,"-------- ",  0);//电压显示
 								   WriteString_16(416, 26+i*20, (u8 *)"      ",  0);
 								   WriteString_16(240-10, 26+i*20, (u8 *)"      ",  0);
@@ -1130,6 +1216,7 @@ void Test_Process(void)
 												Colour.Fword= LCD_COLOR_RED;
 												Beep_Out(1);
 												Led_Fail_On();
+												Plc_Comp(i,1);
 												
 											}
 											else
@@ -1248,6 +1335,10 @@ void Test_Process(void)
 										}
 										else
 										{
+											if(Jk510_Set.jk510_SSet.V_Comp==0 || test_Vsorting == 0)
+											{
+												Plc_Comp(i,0);
+											}
 											Colour.Fword=LCD_COLOR_GREEN;
 											WriteString_16(240-10, 26+i*20, (u8 *)"R PASS",  0);
 										}
@@ -1266,7 +1357,7 @@ void Test_Process(void)
 					}
 				}
 			}else{
-				if(Jk510_Set.jk510_SSet.S_Trig == 1 && Jk510_Set.jk510_SSet.mode == 1)
+				if((Jk510_Set.jk510_SSet.S_Trig == 1 || Jk510_Set.jk510_SSet.S_Trig == 2)  && Jk510_Set.jk510_SSet.mode == 1)
 				{
 					if(Keyboard.state==TRUE)
 						break;
@@ -1284,12 +1375,18 @@ void Test_Process(void)
 						}
 						else
 						{
-							test_start = 0;
+							
+							
 							for(i = chcount;i<9;i++)
 							{
 								if(Jk510_Set.channel_sellect[i]==1)
 								{
-									
+									chcount = i;
+									test_start = 1;
+									break;
+								}else{
+									chcount = 0;
+									test_start = 0;
 								}
 							}
 							
@@ -1490,10 +1587,14 @@ void Test_Process(void)
 					   }
 					   if(Jk510_Set.jk510_SSet.mode)//多路显示
 					   {
-						   WriteString_16(110, 26+chcount*20, "--------",  0);//电阻显示
-						   WriteString_16(296+30, 26+chcount*20,"--------",  0);//电压显示
-						   WriteString_16(416, 26+i*20, (u8 *)"      ",  0);
-						   WriteString_16(240-10, 26+i*20, (u8 *)"      ",  0);
+						   Plc_Comp(chcount,2);
+						   Colour.Fword = White;
+						   WriteString_16(110, 26+chcount*20, "--------",  0);//电阻显示						   
+						   WriteString_16(296+30, 26+chcount*20,"-------- ",  0);//电压显示
+						   WriteString_16(416, 26+chcount*20, (u8 *)"      ",  0);
+						   WriteString_16(240-10, 26+chcount*20, (u8 *)"      ",  0);
+						   Colour.black = LCD_COLOR_TEST_BACK;
+						   LCD_DrawFullRect(190,26+chcount*20,16,16);
 						   Close_Compled();
 							Beep_Out(0);
 							Beep_Off();
@@ -1558,13 +1659,14 @@ void Test_Process(void)
 //							   open_flag=1;
 								if(Jk510_Set.jk510_SSet.mode)//多路显示
 							   {
-								   WriteString_16(110, 26+i*20, "--------",  0);//电阻显示
-								   
-								   WriteString_16(296+30, 26+i*20,"-------- ",  0);//电压显示
-								   WriteString_16(416, 26+i*20, (u8 *)"      ",  0);
-								   WriteString_16(240-10, 26+i*20, (u8 *)"      ",  0);
+								   Plc_Comp(chcount,2);
+								   Colour.Fword = White;
+								   WriteString_16(110, 26+chcount*20, "--------",  0);//电阻显示						   
+								   WriteString_16(296+30, 26+chcount*20,"-------- ",  0);//电压显示
+								   WriteString_16(416, 26+chcount*20, (u8 *)"      ",  0);
+								   WriteString_16(240-10, 26+chcount*20, (u8 *)"      ",  0);
 								   Colour.black = LCD_COLOR_TEST_BACK;
-								   LCD_DrawFullRect(190,26+i*20,16,16);
+								   LCD_DrawFullRect(190,26+chcount*20,16,16);
 								   Close_Compled();
 									Beep_Out(0);
 									Beep_Off();
@@ -1769,7 +1871,7 @@ void Test_Process(void)
 										{
 											Colour.Fword= LCD_COLOR_RED;
 											WriteString_16(416, 26+chcount*20, (u8 *)"V FAIL",  0);
-											Plc_Comp(i,1);
+											Plc_Comp(chcount,1);
 											Led_Fail_On();
 											Beep_Out(1);
 										}
@@ -1777,7 +1879,7 @@ void Test_Process(void)
 										{
 											Colour.Fword=LCD_COLOR_GREEN;
 											WriteString_16(416, 26+chcount*20, (u8 *)"V PASS",  0);
-											Plc_Comp(i,0);
+											Plc_Comp(chcount,0);
 											Led_Pass_On();
 											Beep_Out(0);
 										}
@@ -1796,12 +1898,16 @@ void Test_Process(void)
 										{
 											Colour.Fword= LCD_COLOR_RED;
 											WriteString_16(240-10, 26+chcount*20, (u8 *)"R FAIL",  0);
-											Plc_Comp(i,1);
+											Plc_Comp(chcount,1);
 											Led_Fail_On();
 											Beep_Out(1);
 										}
 										else
 										{
+											if(Jk510_Set.jk510_SSet.V_Comp==0 || test_Vsorting == 0)
+											{
+												Plc_Comp(i,0);
+											}
 											Colour.Fword=LCD_COLOR_GREEN;
 											WriteString_16(240-10, 26+chcount*20, (u8 *)"R PASS",  0);
 										}
@@ -2043,10 +2149,14 @@ void Test_Process(void)
 						   }
 						   if(Jk510_Set.jk510_SSet.mode)//多路显示
 						   {
+							   Plc_Comp(i,2);
+							   Colour.Fword = White;
 							   WriteString_16(110, 26+i*20, "--------",  0);//电阻显示
 							   WriteString_16(296+30, 26+i*20,"--------",  0);//电压显示
 							   WriteString_16(416, 26+i*20, (u8 *)"      ",  0);
 							   WriteString_16(240-10, 26+i*20, (u8 *)"      ",  0);
+							   Colour.black = LCD_COLOR_TEST_BACK;
+							   LCD_DrawFullRect(190,26+i*20,16,16);
 							   Close_Compled();
 								Beep_Out(0);
 								Beep_Off();
@@ -2110,6 +2220,8 @@ void Test_Process(void)
 								   open_flag=1;
 								   if(Jk510_Set.jk510_SSet.mode)//多路显示
 								   {
+									   Plc_Comp(i,2);
+									   Colour.Fword = White;
 									   WriteString_16(110, 26+i*20, "--------",  0);//电阻显示
 									   
 									   WriteString_16(296+30, 26+i*20,"-------- ",  0);//电压显示
@@ -2323,6 +2435,10 @@ void Test_Process(void)
 											{
 												Colour.Fword=LCD_COLOR_GREEN;
 												WriteString_16(240-10, 26+i*20, (u8 *)"R PASS",  0);
+												if(Jk510_Set.jk510_SSet.V_Comp==0 || test_Vsorting == 0)
+												{
+													Plc_Comp(i,0);
+												}
 											}
 										
 										}
@@ -2450,17 +2566,17 @@ void Test_Process(void)
     
                     break;
                     case Key_F2:
-                      
+						FLAG1._595A = 0;
                         SetSystemStatus(SYS_STATUS_SETUP);
                             
                     break;
                     case Key_F3:
-                        
+                        FLAG1._595A = 0;
     					SetSystemStatus(SYS_STATUS_SYSSET);
                              
                     break;
                     case Key_F4:
-                        
+                        FLAG1._595A = 0;
     					SetSystemStatus(SYS_STATUS_SYS);
                                 
                     break;
@@ -2474,6 +2590,7 @@ void Test_Process(void)
                     break;
                     case Key_SETUP:
                         keynum=0;
+						FLAG1._595A = 0;
                         SetSystemStatus(SYS_STATUS_SETUP);
                     break;
                     case Key_FAST:
@@ -2517,7 +2634,6 @@ void Test_Process(void)
 
                     break;
                     case Key_BACK:
-                        
                     break;
                     case Key_LOCK:
 
@@ -2526,6 +2642,7 @@ void Test_Process(void)
                         SetSystemStatus(SYS_STATUS_CLEAR);
                     break;
                     case Key_REST:
+						Test_Process();//测试处理
                     break;
                     case Key_TRIG:
                         test_start=1;

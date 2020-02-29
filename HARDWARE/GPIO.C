@@ -1,5 +1,46 @@
 #include "pbdata.h"
 #include "cpld.h"
+#include "74LS595.h"
+union 
+{
+   unsigned int _595A;
+   struct 
+   {
+       unsigned char  O0:1;
+       unsigned char  P1:1;
+       unsigned char  F1:1;
+       unsigned char  P2:1;
+       unsigned char  F2:1;
+       unsigned char  P3:1;
+       unsigned char  F3:1;
+       unsigned char  P4:1;
+	   unsigned char  O1:1;
+       unsigned char  F4:1;
+       unsigned char  P5:1;
+       unsigned char  F5:1;
+       unsigned char  P6:1;
+       unsigned char  F6:1;
+       unsigned char  P7:1;
+       unsigned char  F7:1;
+   }BIT_FLAG;
+}FLAG1;
+
+//union 
+//{
+//   unsigned char _595B;
+//   struct 
+//   {
+//       unsigned char  O0:1;
+//       unsigned char  F4:1;
+//       unsigned char  P5:1;
+//       unsigned char  F5:1;
+//       unsigned char  P6:1;
+//       unsigned char  F6:1;
+//       unsigned char  P7:1;
+//       unsigned char  F7:1;
+//   }BIT_FLAG;
+//}FLAG2;
+
 //#define BEEP GPIO_SetBits()
 void SM_RelayGPIO_Configuration(void)
 {
@@ -46,6 +87,9 @@ void PLC_GPIO_Configuration(void)
     GPIO_Init(GPIOD,&GPIO_InitStructure); 
     GPIO_InitStructure.GPIO_Pin=GPIO_Pin_9;     //STOP
     GPIO_Init(GPIOG,&GPIO_InitStructure); 
+	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_IN;
+    GPIO_InitStructure.GPIO_Pin=GPIO_Pin_3;     //START
+    GPIO_Init(GPIOC,&GPIO_InitStructure); 
 
 }
 void Led_GPIO_Configuration(void)
@@ -180,7 +224,7 @@ void GPIO_Configuration(void)
 	
     //4094控制端口
     
-    GPIO_InitStructure.GPIO_Pin=GPIO_Pin_1|GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_5;
+    GPIO_InitStructure.GPIO_Pin=GPIO_Pin_1|GPIO_Pin_2|/*GPIO_Pin_3|*/GPIO_Pin_5;
     GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode=GPIO_Mode_OUT;
     GPIO_InitStructure.GPIO_OType=GPIO_OType_PP;
@@ -190,7 +234,7 @@ void GPIO_Configuration(void)
 //	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_Out_PP;
 	GPIO_Init(GPIOC,&GPIO_InitStructure);
     
-    GPIO_SetBits(GPIOC,GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_1);
+    GPIO_SetBits(GPIOC,GPIO_Pin_2/*|GPIO_Pin_3*/|GPIO_Pin_1);
     
     
     GPIO_InitStructure.GPIO_Pin=GPIO_Pin_5;
@@ -235,6 +279,14 @@ void GPIO_Configuration(void)
     GPIO_InitStructure.GPIO_Pin=GPIO_Pin_13;
 //	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_IPU;
     GPIO_Init(GPIOB,&GPIO_InitStructure); 
+	
+	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_IN;
+ //   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    
+    GPIO_InitStructure.GPIO_Pin=GPIO_Pin_3;
+//	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_IPU;
+    GPIO_Init(GPIOC,&GPIO_InitStructure); 
     
 	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_3;
     GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
@@ -279,43 +331,63 @@ void GPIO_Configuration(void)
 
 void CH1COMP(u8 status)
 {
-	if(status == 1)
+	if(status == 1)//不合格
 	{
-		GPIO_SetBits(GPIOI,GPIO_Pin_3);
-	}else if(status == 0){
-		GPIO_ResetBits(GPIOI,GPIO_Pin_3);
+		FLAG1.BIT_FLAG.P1 = 0;
+		FLAG1.BIT_FLAG.F1 = 1;
+	}else if(status == 0){//合格
+		FLAG1.BIT_FLAG.P1 = 1;
+		FLAG1.BIT_FLAG.F1 = 0;
+	}else if(status == 2){//复位
+		FLAG1.BIT_FLAG.P1 = 0;
+		FLAG1.BIT_FLAG.F1 = 0;
 	}
 }
 
 void CH2COMP(u8 status)
 {
-	if(status == 1)
+	if(status == 1)//不合格
 	{
-		GPIO_SetBits(GPIOC,GPIO_Pin_6);
-	}else if(status == 0){
-		GPIO_ResetBits(GPIOC,GPIO_Pin_6);
+		FLAG1.BIT_FLAG.P2 = 0;
+		FLAG1.BIT_FLAG.F2 = 1;
+	}else if(status == 0){//合格
+		FLAG1.BIT_FLAG.P2 = 1;
+		FLAG1.BIT_FLAG.F2 = 0;
+	}else if(status == 2){//复位
+		FLAG1.BIT_FLAG.P2 = 0;
+		FLAG1.BIT_FLAG.F2 = 0;
 	}
 }
 
 
 void CH3COMP(u8 status)
 {
-	if(status == 1)
+	if(status == 1)//不合格
 	{
-		GPIO_SetBits(GPIOB,GPIO_Pin_3);
-	}else if(status == 0){
-		GPIO_ResetBits(GPIOB,GPIO_Pin_3);
+		FLAG1.BIT_FLAG.P3 = 0;
+		FLAG1.BIT_FLAG.F3 = 1;
+	}else if(status == 0){//合格
+		FLAG1.BIT_FLAG.P3 = 1;
+		FLAG1.BIT_FLAG.F3 = 0;
+	}else if(status == 2){//复位
+		FLAG1.BIT_FLAG.P3 = 0;
+		FLAG1.BIT_FLAG.F3 = 0;
 	}
 }
 
 
 void CH4COMP(u8 status)
 {
-	if(status == 1)
+	if(status == 1)//不合格
 	{
-		GPIO_SetBits(GPIOD,GPIO_Pin_5);
-	}else if(status == 0){
-		GPIO_ResetBits(GPIOD,GPIO_Pin_5);
+		FLAG1.BIT_FLAG.P4 = 0;
+		FLAG1.BIT_FLAG.F4 = 1;
+	}else if(status == 0){//合格
+		FLAG1.BIT_FLAG.P4 = 1;
+		FLAG1.BIT_FLAG.F4 = 0;
+	}else if(status == 2){//复位
+		FLAG1.BIT_FLAG.P4 = 0;
+		FLAG1.BIT_FLAG.F4 = 0;
 	}
 }
 
@@ -328,6 +400,12 @@ u8 Read_Openflag(void)
 u8 Read_ExtTrig(void)
 {
     return GPIO_ReadInputDataBit( GPIOD,  GPIO_Pin_13);
+
+}
+
+u8 Read_ExtReset(void)
+{
+    return GPIO_ReadInputDataBit( GPIOC,  GPIO_Pin_3);
 
 }
 
@@ -669,6 +747,7 @@ void Plc_Comp(u8 ch,u8 res)
 		}break;
 		default:break;
 	}
+//	LED595SendData();
 }
 
 
