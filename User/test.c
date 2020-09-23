@@ -90,6 +90,20 @@ extern union
 //  
 //}  
 
+//设置选项复位
+void Reset_settings(void)
+{
+	u8 i;
+	for(i=0;i<10;i++)
+	{
+		Jk510_Set.Res_comp.Res_Hi[i].Num = 0;
+		Jk510_Set.Res_comp.Res_Lo[i].Num = 0;
+		Jk510_Set.V_comp.V_Hi[i].Num = 0;
+		Jk510_Set.V_comp.V_Lo[i].Num = 0;
+	}
+}
+
+
 void JumpBoot(u8 flag)
 {
   	void (*pUserApp)(void);
@@ -247,7 +261,7 @@ void Power_Process(void)
                     Debug_Cood.ypos =120;
                     Debug_Cood.lenth=120;
                     input_password(&Debug_Cood);
-			SetSystemStatus(SYS_STATUS_DEBUG);
+//			SetSystemStatus(SYS_STATUS_DEBUG);
                 break;
             case		Key_LEFT:
                 break;
@@ -824,19 +838,16 @@ void Test_Process(void)
             
         }
 		//Jk510_Set.jk510_SSet.trig=0;
-		if(Jk510_Set.jk510_SSet.trig==2 && extdelay == 0)
+		if(Jk510_Set.jk510_SSet.trig==2)
 		{
-			if(Extrigflag == 0)
+			if(Extrigflag == 0 && Jk510_Set.jk510_SSet.S_Trig == 1)
 			{
 				test_start = 1;
-				extdelay = 10;
 			}
 			if(Extrstflag == 0)
 			{
 				Test_Process();//测试处理
 			}
-		}else{
-			extdelay --;
 		}
 		 if(Jk510_Set.jk510_SSet.trig==0)
             test_start=1;
@@ -1362,7 +1373,7 @@ void Test_Process(void)
 					}
 				}
 			}else{
-				if((Jk510_Set.jk510_SSet.S_Trig == 1 || Jk510_Set.jk510_SSet.S_Trig == 2)  && Jk510_Set.jk510_SSet.mode == 1)
+				if((Jk510_Set.jk510_SSet.trig == 1 || Jk510_Set.jk510_SSet.trig == 2)  && Jk510_Set.jk510_SSet.S_Trig == 1)
 				{
 					if(Keyboard.state==TRUE)
 						break;
@@ -1439,7 +1450,7 @@ void Test_Process(void)
 										
 										read_adI_1();//
 										Range_value=I_ad;
-										if(Keyboard.state==TRUE)
+										if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 										break;
 									
 									}
@@ -1451,7 +1462,7 @@ void Test_Process(void)
 									while(range_over)
 									{
 										Range_Changecomp();	//换挡 比较
-										 if(Keyboard.state==TRUE)
+										 if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 										break; 
 										read_adV_1();//
 									   Range_Value_V=V_ad;
@@ -1471,7 +1482,7 @@ void Test_Process(void)
 										
 										read_adI_2();//
 										Range_value=I_ad;
-										 if(Keyboard.state==TRUE)
+										 if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 										break; 
 									
 									}
@@ -1486,7 +1497,7 @@ void Test_Process(void)
 										
 										read_adV_2();//
 									   Range_Value_V=V_ad;
-									 if(Keyboard.state==TRUE)
+									 if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 										break; 
 									
 									}
@@ -1927,7 +1938,7 @@ void Test_Process(void)
 								
 									
 								}
-								test_start = 0;
+//								test_start = 0;
 							}
 							
 						}
@@ -2003,7 +2014,7 @@ void Test_Process(void)
 											
 											read_adI_1();//
 											Range_value=I_ad;
-											if(Keyboard.state==TRUE)
+											if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 											break;
 										
 										}
@@ -2015,7 +2026,7 @@ void Test_Process(void)
 										while(range_over)
 										{
 											Range_Changecomp();	//换挡 比较
-											 if(Keyboard.state==TRUE)
+											 if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 											break; 
 											read_adV_1();//
 										   Range_Value_V=V_ad;
@@ -2035,7 +2046,7 @@ void Test_Process(void)
 											
 											read_adI_2();//
 											Range_value=I_ad;
-											 if(Keyboard.state==TRUE)
+											 if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 											break; 
 										
 										}
@@ -2050,7 +2061,7 @@ void Test_Process(void)
 											
 											read_adV_2();//
 										   Range_Value_V=V_ad;
-										 if(Keyboard.state==TRUE)
+										 if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 											break; 
 										
 										}
@@ -2067,7 +2078,7 @@ void Test_Process(void)
 											
 											read_adI_3();//
 											Range_value=I_ad;
-											 if(Keyboard.state==TRUE)
+											 if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 											break; 
 										
 										
@@ -2083,7 +2094,7 @@ void Test_Process(void)
 											
 											read_adV_3();//
 										   Range_Value_V=V_ad;
-											 if(Keyboard.state==TRUE)
+											 if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 											break; 
 										
 										
@@ -2101,7 +2112,7 @@ void Test_Process(void)
 											
 											read_adI_1();//
 											Range_value=I_ad;
-											 if(Keyboard.state==TRUE)
+											 if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 											break; 
 										
 										
@@ -2117,7 +2128,7 @@ void Test_Process(void)
 											
 											read_adV_1();//
 										   Range_Value_V=V_ad;
-											 if(Keyboard.state==TRUE)
+											 if(Jk510_Set.jk510_SSet.trig == 1 && Keyboard.state==TRUE)
 											break; 
 										
 										
@@ -2653,7 +2664,11 @@ void Test_Process(void)
 						Test_Process();//测试处理
                     break;
                     case Key_TRIG:
-						if(Jk510_Set.jk510_SSet.trig==1)
+						if(Jk510_Set.jk510_SSet.trig==1 && Extrigflag == 1)
+						{
+							test_start=1;
+                        }
+						if(Jk510_Set.jk510_SSet.trig==2 && Jk510_Set.jk510_SSet.S_Trig == 0)
 						{
 							test_start=1;
                         }
@@ -3552,7 +3567,7 @@ void Setup_R_Comp_Process(void)
     u8 i;
 	Disp_Coordinates_Typedef  Coordinates;
 //	Send_Ord_Typedef Uart;
-	
+//	Jk510_Set.Res_comp.mode = 1;
 	vu8 key;
 	vu8 Disp_Flag=1;
 	keynum=0;

@@ -117,6 +117,7 @@ void delay(u32 nCount);
 //void delay_ms(u16 nms);
 void SetSoftTimer(u8 id, u8 ticks);
 u8 GetSoftTimerOut(u8 id);
+void Reset_settings(void);
 
 //16bit数据的位操作定义
 #define	SetD0	(0x0001)

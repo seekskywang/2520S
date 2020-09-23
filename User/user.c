@@ -5221,7 +5221,10 @@ void Sys_Process(void)
 				case Key_SETUP:
                     SetSystemStatus(SYS_STATUS_SETUP);
 				break;
-				
+				case Key_REST:
+				{
+					Reset_settings();
+				}
 				
 				default:
 				break;
